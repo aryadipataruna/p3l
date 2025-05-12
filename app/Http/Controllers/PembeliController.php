@@ -72,11 +72,13 @@ class PembeliController extends Controller
             // You might want to hide the password in the response
             // $pembeli->makeHidden('PASSWORD_PEMBELI');
 
-            return response()->json([
-                "status" => true,
-                "message" => "Pembeli successfully created/registered!",
-                "data" => $pembeli,
-            ], 201); // Use 201 for created resource
+            // return response()->json([
+            //     "status" => true,
+            //     "message" => "Pembeli successfully created/registered!",
+            //     "data" => $pembeli,
+            // ], 201); // Use 201 for created resource
+            return redirect()->route('login-regis')->with('success', 'Pendaftaran Pembeli berhasil! Silakan masuk.');
+
         } catch (\Exception $e) {
             return response()->json([
                 "status" => false,

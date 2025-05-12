@@ -53,16 +53,17 @@ class LoginController extends Controller
         // If login is successful, create a new API token
         $token = $this->createTokenForUser($userInfo['model'], $userInfo['role']);
 
+        return redirect()->route('home')->with('success', 'Login berhasil! Selamat datang.');
         // Return a successful login response
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'token' => $token,
-                'user' => $userInfo['model'], // Return the user model data
-                'role' => $userInfo['role'] // Return the determined role
-            ],
-            'message' => 'Login berhasil' // Login successful
-        ]);
+        // return response()->json([
+        //     'success' => true,
+        //     'data' => [
+        //         'token' => $token,
+        //         'user' => $userInfo['model'], // Return the user model data
+        //         'role' => $userInfo['role'] // Return the determined role
+        //     ],
+        //     'message' => 'Login berhasil' // Login successful
+        // ]);
     }
 
     /**

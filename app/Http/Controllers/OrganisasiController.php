@@ -76,6 +76,7 @@ class OrganisasiController extends Controller
                 "message" => "Organisasi successfully created/registered!",
                 "data" => $organisasi,
             ], 201); // Use 201
+
         } catch (\Exception $e) {
             return response()->json([
                 "status" => false,

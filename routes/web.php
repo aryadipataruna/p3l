@@ -9,7 +9,7 @@ Route::get('/', function () {
 
 Route::get('/home', function () {
     return view('homePage');
-});
+})->name('home');
 
 Route::match(['GET', 'POST'], '/login-regis', function () {
     return view('loginRegister');

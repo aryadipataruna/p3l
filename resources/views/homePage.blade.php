@@ -85,7 +85,6 @@
     <div class="d-flex align-items-center">
         <a href="#" class="nav-link text-light"><i class="fa fa-search me-2"></i></a>
         <a href="#" class="nav-link text-light"><i class="fa fa-shopping-cart me-2"></i></a>
-        <a href="#" class="nav-link text-light">Daftar</a>
         <a href="{{ route('login-regis') }}" class="nav-link text-light">Log In</a>
     </div>
 </nav>
