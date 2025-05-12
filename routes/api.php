@@ -1,58 +1,97 @@
 <?php
 
-use App\Http\Controllers\PembeliController;
-use App\Http\Controllers\PegawaiController;
-use App\Http\Controllers\PenitipController;
-use App\Http\Controllers\OrganisasiController;
 use App\Http\Controllers\AlamatController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\DiskusiController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\KomisiController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MerchandiseController;
-use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\OrganisasiController;
+use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\PembeliController;
+use App\Http\Controllers\PenitipController;
 use App\Http\Controllers\PenukaranController;
-use App\Http\Controllers\ReqDonasiController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\ReqDonasiController; // Import the LoginController
+
 use Illuminate\Support\Facades\Route;
 
+// Public Routes
+
+// Registration routes (handled by individual controllers' store methods)
 Route::post('/pembeli/register', [PembeliController::class, 'store'])->name('pembeli.store');
-Route::post('/pembeli/login', [PembeliController::class, 'login'])->name('pembeli.login');
 Route::post('/penitip/register', [PenitipController::class, 'store'])->name('penitip.store');
-Route::post('/penitip/login', [PenitipController::class, 'login'])->name('penitip.login');
 Route::post('/pegawai/register', [PegawaiController::class, 'store'])->name('pegawai.store');
-Route::post('/pegawai/login', [PegawaiController::class, 'login'])->name('pegawai.login');
 Route::post('/organisasi/register', [OrganisasiController::class, 'store'])->name('organisasi.store');
-Route::post('/organisasi/login', [OrganisasiController::class, 'login'])->name('organisasi.login');
 
+// Unified Login route (handled by LoginController)
+// This replaces the individual login routes below
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+
+// Individual Login routes (REMOVED as they are now handled by the unified /login)
+Route::post('/pembeli/login', [PembeliController::class, 'login'])->name('pembeli.login');
+//Route::post('/penitip/login', [PenitipController::class, 'login'])->name('penitip.login');
+//Route::post('/pegawai/login', [PegawaiController::class, 'login'])->name('pegawai.login');
+// Route::post('/organisasi/login', [OrganisasiController::class, 'login'])->name('organisasi.login');
+
+// General Authenticated Routes (for any authenticated user type)
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/pegawai', [PegawaiController::class, 'index'])->name('pegawai.index');
-    Route::get('/pegawai/{id}', [PegawaiController::class, 'show'])->name('pegawai.show');
-    Route::post('/pegawai/create', [PegawaiController::class, 'store'])->name('pegawai.store');
-    Route::put('/pegawai/update/{id}', [PegawaiController::class, 'update'])->name('pegawai.update');
-    Route::delete('/pegawai/delete/{id}', [PegawaiController::class, 'destroy'])->name('pegawai.destroy');
-    Route::post('pegawai/logout', [PegawaiController::class, 'logout'])->name('pegawai.logout');
+    // Get authenticated user info (handled by LoginController)
+    Route::get('/user', [LoginController::class, 'getUser'])->name('user.authenticated');
+    // Logout route (handled by LoginController)
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-    Route::get('/pembeli', [PembeliController::class, 'index'])->name('pembeli.index');
-    Route::get('/pembeli/{id}', [PembeliController::class, 'show'])->name('pembeli.show');
-    Route::post('/pembeli/create', [PembeliController::class, 'store'])->name('pembeli.store');
-    Route::put('/pembeli/update/{id}', [PembeliController::class, 'update'])->name('pembeli.update');
-    Route::delete('/pembeli/delete/{id}', [PembeliController::class, 'destroy'])->name('pembeli.destroy');
-    Route::post('pembeli/logout', [PembeliController::class, 'logout'])->name('pembeli.logout');
+    // You can add other routes here that are accessible to ANY authenticated user
+});
 
-    Route::get('/penitip', [PenitipController::class, 'index'])->name('penitip.index');
-    Route::get('/penitip/{id}', [PenitipController::class, 'show'])->name('penitip.show');
-    Route::post('/penitip/create', [PenitipController::class, 'store'])->name('penitip.store');
-    Route::put('/penitip/update/{id}', [PenitipController::class, 'update'])->name('penitip.update');
-    Route::delete('/penitip/delete/{id}', [PenitipController::class, 'destroy'])->name('penitip.destroy');
-    Route::post('penitip/logout', [PenitipController::class, 'logout'])->name('penitip.logout');
+// Authenticated Routes Grouped by User Type (Requires a token from the specific user type)
 
-    Route::get('/organisasi', [OrganisasiController::class, 'index'])->name('organisasi.index');
-    Route::get('/organisasi/{id}', [OrganisasiController::class, 'show'])->name('organisasi.show');
-    Route::post('/organisasi/create', [OrganisasiController::class, 'store'])->name('organisasi.store');
-    Route::put('/organisasi/update/{id}', [OrganisasiController::class, 'update'])->name('organisasi.update');
-    Route::delete('/organisasi/delete/{id}', [OrganisasiController::class, 'destroy'])->name('organisasi.destroy');
-    Route::post('organisasi/logout', [OrganisasiController::class, 'logout'])->name('organisasi.logout');
+// Authenticated Routes for Pegawai
+Route::middleware('auth:sanctum')->group(function () {
+                                                                                                                                      // Pegawai specific routes (can be accessed by an authenticated Pegawai)
+    Route::get('/pegawai/authenticated', [PegawaiController::class, 'index'])->name('pegawai.index.authenticated');                   // Renamed for clarity
+    Route::get('/pegawai/authenticated/{id}', [PegawaiController::class, 'show'])->name('pegawai.show.authenticated');                // Renamed for clarity
+    Route::post('/pegawai/create/authenticated', [PegawaiController::class, 'store'])->name('pegawai.create.authenticated');          // Renamed
+    Route::put('/pegawai/update/authenticated/{id}', [PegawaiController::class, 'update'])->name('pegawai.update.authenticated');     // Renamed
+    Route::delete('/pegawai/delete/authenticated/{id}', [PegawaiController::class, 'destroy'])->name('pegawai.delete.authenticated'); // Renamed
+                                                                                                                                      // Logout route is handled in the general authenticated group above
+                                                                                                                                      // Route::post('pegawai/logout', [PegawaiController::class, 'logout'])->name('pegawai.logout'); // REMOVED
+});
+
+// Authenticated Routes for Pembeli
+Route::middleware('auth:sanctum')->group(function () {
+                                                                                                                                      // Pembeli specific routes (can be accessed by an authenticated Pembeli)
+    Route::get('/pembeli/authenticated', [PembeliController::class, 'index'])->name('pembeli.index.authenticated');                   // Renamed for clarity
+    Route::get('/pembeli/authenticated/{id}', [PembeliController::class, 'show'])->name('pembeli.show.authenticated');                // Renamed for clarity
+    Route::post('/pembeli/create/authenticated', [PembeliController::class, 'store'])->name('pembeli.create.authenticated');          // Renamed
+    Route::put('/pembeli/update/authenticated/{id}', [PembeliController::class, 'update'])->name('pembeli.update.authenticated');     // Renamed
+    Route::delete('/pembeli/delete/authenticated/{id}', [PembeliController::class, 'destroy'])->name('pembeli.delete.authenticated'); // Renamed
+                                                                                                                                      // Logout route is handled in the general authenticated group above
+                                                                                                                                      // Route::post('pembeli/logout', [PembeliController::class, 'logout'])->name('pembeli.logout'); // REMOVED
+});
+
+// Authenticated Routes for Penitip
+Route::middleware('auth:sanctum')->group(function () {
+                                                                                                                                      // Penitip specific routes (can be accessed by an authenticated Penitip)
+    Route::get('/penitip/authenticated', [PenitipController::class, 'index'])->name('penitip.index.authenticated');                   // Renamed for clarity
+    Route::get('/penitip/authenticated/{id}', [PenitipController::class, 'show'])->name('penitip.show.authenticated');                // Renamed for clarity
+    Route::post('/penitip/create/authenticated', [PenitipController::class, 'store'])->name('penitip.create.authenticated');          // Renamed
+    Route::put('/penitip/update/authenticated/{id}', [PenitipController::class, 'update'])->name('penitip.update.authenticated');     // Renamed
+    Route::delete('/penitip/delete/authenticated/{id}', [PenitipController::class, 'destroy'])->name('penitip.delete.authenticated'); // Renamed
+                                                                                                                                      // Logout route is handled in the general authenticated group above
+                                                                                                                                      // Route::post('penitip/logout', [PenitipController::class, 'logout')->name('penitip.logout'); // REMOVED
+});
+
+// Authenticated Routes for Organisasi
+Route::middleware('auth:sanctum')->group(function () {
+                                                                                                                                               // Organisasi specific routes (can be accessed by an authenticated Organisasi)
+    Route::get('/organisasi/authenticated', [OrganisasiController::class, 'index'])->name('organisasi.index.authenticated');                   // Renamed for clarity
+    Route::get('/organisasi/authenticated/{id}', [OrganisasiController::class, 'show'])->name('organisasi.show.authenticated');                // Renamed for clarity
+    Route::post('/organisasi/create/authenticated', [OrganisasiController::class, 'store'])->name('organisasi.create.authenticated');          // Renamed
+    Route::put('/organisasi/update/authenticated/{id}', [OrganisasiController::class, 'update'])->name('organisasi.update.authenticated');     // Renamed
+    Route::delete('/organisasi/delete/authenticated/{id}', [OrganisasiController::class, 'destroy'])->name('organisasi.delete.authenticated'); // Renamed
+                                                                                                                                               //Logout route is handled in the general authenticated group above
+                                                                                                                                               // Route::post('organisasi/logout', [OrganisasiController::class, 'logout'])->name('organisasi.logout'); // REMOVED
 });
 
 Route::get('/alamat', [AlamatController::class, 'index'])->name('alamat.index');
@@ -108,3 +147,12 @@ Route::get('/reqDonasi/{id}', [ReqDonasiController::class, 'show'])->name('reqDo
 Route::post('/reqDonasi/create', [ReqDonasiController::class, 'store'])->name('reqDonasi.store');
 Route::put('/reqDonasi/update/{id}', [ReqDonasiController::class, 'update'])->name('reqDonasi.update');
 Route::delete('/reqDonasi/delete/{id}', [ReqDonasiController::class, 'destroy'])->name('reqDonasi.destroy');
+
+// Get authenticated Penitip profile, saldo, and reward
+Route::get('/penitip/profile', [PenitipController::class, 'profile'])->name('penitip.profile.index');
+Route::get('/penitip/{id}', [PenitipController::class, '']);
+Route::middleware(['auth:sanctum', 'role:penitip'])->group(function () {
+    Route::get('/penitip/profile', [PenitipController::class, 'profile'])->name('penitip.profile');
+});
+
+Route::get('/profile', [PenitipController::class, 'profilePenitip'])->middleware('auth:sanctum')->name('penitip.profile');
