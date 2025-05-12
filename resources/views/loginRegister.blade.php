@@ -238,83 +238,174 @@
 <body>
     <div class="container">
         <div class="signin-signup">
-        <form action="{{ route('loginRegister') }}" method="POST" class="sign-in-form">
-            @csrf <!-- Include CSRF token for security -->
-            <h2 class="title">Sign in</h2>
-            <div class="input-field">
-                <i class="fas fa-user"></i>
-                <input type="text" name="username" placeholder="Username" required>
-            </div>
-            <div class="input-field">
-                <i class="fas fa-lock"></i>
-                <input type="password" name="password" placeholder="Password" required>
-            </div>
-            <input type="submit" value="Login" class="btn">
-            <p class="account-text">Don't have an account? <a href="#" id="sign-up-btn2">Sign up</a></p>
-        </form>
-            <form action="{{ route('home') }}" class="sign-up-form">
-                <h2 class="title">Sign up</h2>
+            {{-- Update action to your login route --}}
+            <form action="{{ route('login') }}" method="POST" class="sign-in-form">
+                {{-- Include CSRF token for security if using Laravel Blade --}}
+                @csrf
+                <h2 class="title">Sign in</h2>
                 <div class="input-field">
                     <i class="fas fa-user"></i>
-                    <input type="text" placeholder="Username" required>
-                </div>
-                <div class="input-field">
-                    <i class="fas fa-envelope"></i>
-                    <input type="text" placeholder="Email" required>
-                </div>
-                <div class="input-field">
-                    <i class="fas fa-phone"></i>
-                    <input type="text" placeholder="Phone Number"required>
-                </div>
-                <div class="input-field">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <input type="text" placeholder="Alamat" required>
+                    {{-- Assuming your LoginController expects 'email' for login --}}
+                    <input type="text" name="email" placeholder="Email" required>
                 </div>
                 <div class="input-field">
                     <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Password" required>
+                    <input type="password" name="password" placeholder="Password" required>
                 </div>
-                <input type="submit" value="Sign up" class="btn">
-                <p class="account-text">Already have an account? <a href="#" id="sign-in-btn2">Sign in</a></p>
+                {{-- Add a checkbox for 'remember' if your LoginController uses it --}}
+                {{-- <div class="input-field" style="border: none; background: none; margin-bottom: 0;">
+                     <input type="checkbox" name="remember" id="remember" style="width: auto; flex: none; margin-right: 5px;">
+                     <label for="remember" style="color: #444; font-weight: normal; font-size: 1rem;">Remember Me</label>
+                 </div> --}}
+                <input type="submit" value="Login" class="btn">
+                <p class="account-text">Don't have an account? <a href="#" id="sign-up-btn2">Sign up</a></p>
+            </form>
+
+ {{-- The form action will be set dynamically by JavaScript based on the selected role --}}
+            <form action="" method="POST" class="sign-up-form">
+                 {{-- Include CSRF token for security if using Laravel Blade --}}
+                 @csrf
+                <h2 class="title">Sign up</h2>
+
+                <div class="input-field">
+                    <i class="fas fa-user"></i>
+                    {{-- Name field - adjust name attribute based on what your backend expects --}}
+                    <input type="text" name="name" placeholder="Nama Lengkap" required>
+                </div>
+
+                 <div class="input-field">
+                    <i class="fas fa-envelope"></i>
+                    {{-- Email field - adjust name attribute based on what your backend expects --}}
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+
+                 <div class="input-field">
+                    {{-- Icon for role selection --}}
+                    <i class="fas fa-user-tag"></i>
+                    {{-- Role selection dropdown --}}
+                    <select name="role" id="role-select" required>
+                        <option value="" disabled selected>Pilih Role</option> {{-- Default disabled option --}}
+                        <option value="pembeli">Pembeli</option>
+                        <option value="penitip">Penitip</option>
+                    </select>
+                </div>
+
+                <div class="input-field">
+                    <i class="fas fa-phone"></i>
+                     {{-- Phone Number field - adjust name attribute based on what your backend expects --}}
+                    <input type="text" name="phone" placeholder="Nomor Telepon" required>
+                </div>
+
+                <div class="input-field">
+                    <i class="fas fa-map-marker-alt"></i>
+                     {{-- Address field - adjust name attribute based on what your backend expects --}}
+                    <input type="text" name="address" placeholder="Alamat" required>
+                </div>
+
+                <div class="input-field">
+                    <i class="fas fa-lock"></i>
+                     {{-- Password field - adjust name attribute based on what your backend expects --}}
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+
+                 {{-- Password confirmation is typically handled in the backend validation --}}
+                 {{-- If your backend expects it from the form, uncomment and add name="password_confirmation" --}}
+                 {{-- <div class="input-field">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password_confirmation" placeholder="Konfirmasi Password" required>
+                </div> --}}
+
+                 {{-- You might need hidden inputs for default values for nullable fields
+                      depending on the selected role and your backend logic. --}}
+                 {{-- Example for Pembeli: <input type="hidden" name="POIN_PEMBELI" value="0"> --}}
+
+
+                <input type="submit" value="Sign Up" class="btn"> {{-- Changed button text back to Sign Up --}}
+                 <p class="account-text">Already have an account? <a href="#" id="sign-in-btn2">Sign in</a></p>
             </form>
         </div>
+
         <div class="panels-container">
             <div class="panel left-panel">
                 <div class="content">
                     <h3>Sudah punya akun?</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque accusantium dolor, eos incidunt minima iure?</p>
-                    <button class="btn" id="sign-in-btn">Sign in</button>
+                    <p>Masuk untuk melanjutkan pengalaman berbelanja Anda!</p> <button class="btn" id="sign-in-btn">Sign in</button>
                 </div>
-                <img src="signin.svg" alt="" class="image">
-            </div>
+                <img src="signin.svg" alt="Sign In Illustration" class="image"> </div>
             <div class="panel right-panel">
                 <div class="content">
                     <h3>Belum punya akun?</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque accusantium dolor, eos incidunt minima iure?</p>
-                    <button class="btn" id="sign-up-btn">Sign up</button>
+                    <p>Daftar sekarang dan temukan barang-barang unik di ReUse Mart!</p> <button class="btn" id="sign-up-btn">Sign up</button>
                 </div>
-                <img src="signup.svg" alt="" class="image">
-            </div>
+                <img src="signup.svg" alt="Sign Up Illustration" class="image"> </div>
         </div>
     </div>
+
     <script>
+        // Get references to DOM elements
         const sign_in_btn = document.querySelector("#sign-in-btn");
         const sign_up_btn = document.querySelector("#sign-up-btn");
         const container = document.querySelector(".container");
         const sign_in_btn2 = document.querySelector("#sign-in-btn2");
         const sign_up_btn2 = document.querySelector("#sign-up-btn2");
+
+        // Get references to the sign-up form and the role select dropdown
+        const signUpForm = document.querySelector(".sign-up-form");
+        const roleSelect = document.querySelector("#role-select");
+
+        // Function to update the form action based on the selected role
+        function updateSignUpFormAction() {
+            const selectedRole = roleSelect.value;
+            let registrationRoute = '';
+
+            // Determine the registration route based on the selected role
+            switch (selectedRole) {
+                case 'pembeli':
+                    registrationRoute = '{{ route("pembeli.store") }}'; // Use the named route for pembeli registration
+                    break;
+                case 'organisasi':
+                    registrationRoute = '{{ route("organisasi.store") }}'; // Use the named route for organisasi registration
+                    break;
+                default:
+                    // Set a default or handle the case where no role is selected
+                    registrationRoute = ''; // Or a default registration route if applicable
+            }
+
+            // Update the form's action attribute
+            signUpForm.action = registrationRoute;
+        }
+
+        // Add event listener to the role select dropdown to update the form action on change
+        roleSelect.addEventListener("change", updateSignUpFormAction);
+
+        // Call the function initially to set the correct action based on the default selected option
+        updateSignUpFormAction();
+
+
+        // Event listener for the desktop "Sign up" button
         sign_up_btn.addEventListener("click", () => {
             container.classList.add("sign-up-mode");
         });
+
+        // Event listener for the desktop "Sign in" button
         sign_in_btn.addEventListener("click", () => {
             container.classList.remove("sign-up-mode");
         });
+
+        // Event listener for the mobile "Sign up" link
         sign_up_btn2.addEventListener("click", () => {
             container.classList.add("sign-up-mode2");
         });
+
+        // Event listener for the mobile "Sign in" link
         sign_in_btn2.addEventListener("click", () => {
             container.classList.remove("sign-up-mode2");
         });
+
+        // Note: Form submissions are now handled by the browser using the 'action' and 'method' attributes.
+        // JavaScript is primarily used here for the panel switching animation and dynamically setting the form action.
+        // Server-side validation and response handling will be done by your Laravel controllers.
+
     </script>
 </body>
 </html>

@@ -42,6 +42,7 @@ class PenitipController extends Controller
             $validateData = $request->validate([
                 'NAMA_PENITIP' => 'required|string|max:255', // NOT NULL
                 'ALAMAT_PENITIP' => 'required|string', // NOT NULL
+                'EMAIL_PENITIP' => 'required|string|email|max:255|unique:PENITIP,EMAIL_PENITIP',
                 'PASSWORD_PENITIP' => 'required|string|min:8', // NOT NULL, added min length
                 'SALDO_PENITIP' => 'required|numeric', // NOT NULL
                 'POIN_PENITIP' => 'required|numeric', // NOT NULL
@@ -175,6 +176,7 @@ class PenitipController extends Controller
             $validateData = $request->validate([
                 'NAMA_PENITIP' => 'required|string',
                 'ALAMAT_PENITIP' => 'required|string',
+                'EMAIL_PENITIP' => 'required|string|email|unique:organisasi,EMAIL_PENITIP,' . $id . ',ID_PENITIP',
                 'PASSWORD_PENITIP' => 'nullable|string|min:8', // Make password nullable for update
                 'SALDO_PENITIP' => 'required|numeric',
                 'POIN_PENITIP' => 'required|numeric',

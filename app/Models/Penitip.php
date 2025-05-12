@@ -22,6 +22,7 @@ class Penitip extends Authenticatable
         'ID_PENITIP', // Include ID_PENITIP in fillable
         'NAMA_PENITIP',
         'ALAMAT_PENITIP',
+        'EMAIL_PENITIP',
         'PASSWORD_PENITIP',
         'SALDO_PENITIP',
         'POIN_PENITIP',

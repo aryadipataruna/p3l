@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RegistrationHandlerController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -10,6 +11,8 @@ Route::get('/home', function () {
     return view('homePage');
 });
 
-Route::get('/login-regis', function () {
+Route::match(['GET', 'POST'], '/login-regis', function () {
     return view('loginRegister');
-});
+})->name('login-regis');
+
+Route::post('/register', [RegistrationHandleController::class, 'handleRegistration'])->name('handle.registration');
