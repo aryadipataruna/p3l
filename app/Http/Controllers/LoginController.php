@@ -53,17 +53,17 @@ class LoginController extends Controller
         // If login is successful, create a new API token
         $token = $this->createTokenForUser($userInfo['model'], $userInfo['role']);
 
-        return redirect()->route('home')->with('success', 'Login berhasil! Selamat datang.');
+        // return redirect()->route('home')->with('success', 'Login berhasil! Selamat datang.');
         // Return a successful login response
-        // return response()->json([
-        //     'success' => true,
-        //     'data' => [
-        //         'token' => $token,
-        //         'user' => $userInfo['model'], // Return the user model data
-        //         'role' => $userInfo['role'] // Return the determined role
-        //     ],
-        //     'message' => 'Login berhasil' // Login successful
-        // ]);
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'token' => $token,
+                'user' => $userInfo['model'], // Return the user model data
+                'role' => $userInfo['role'] // Return the determined role
+            ],
+            'message' => 'Login berhasil' // Login successful
+        ]);
     }
 
     /**
@@ -161,17 +161,17 @@ class LoginController extends Controller
             // Return the name of the position as the role (e.g., 'Owner', 'Admin', 'Kepala Gudang')
             // Or map specific IDs to roles if needed
             switch ($jabatan->ID_JABATAN) { // Use ID_JABATAN from the fetched model
-                case "JBT1":
+                case "JAB001":
                     return 'owner';
-                case "JBT2":
+                case "JAB002":
                     return 'admin';
-                case "JBT3":
+                case "JAB003":
                     return 'kepala gudang'; // Specific role name
-                case "JBT4":
+                case "JAB003":
                     return 'customer service'; // Specific role name
-                case "JBT5":
+                case "JAB004":
                     return 'hunter';
-                case "JBT6":
+                case "JAB005":
                     return 'kurir';
                 default:
                     return 'pegawai'; // Default role for other Jabatan IDs

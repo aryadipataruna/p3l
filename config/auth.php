@@ -44,6 +44,27 @@ return [
         'api' => [
             'driver' => 'sanctum',
             'provider' => 'users',
+            'hash' => false,
+        ],
+        
+        'pegawai' => [
+            'driver' => 'sanctum',
+            'provider' => 'pegawais',
+        ],
+        
+        'pembeli' => [
+            'driver' => 'sanctum',
+            'provider' => 'pembelis',
+        ],
+        
+        'penitip' => [
+            'driver' => 'sanctum',
+            'provider' => 'penitips',
+        ],
+        
+        'organisasis' => [
+            'driver' => 'sanctum',
+            'provider' => 'organisasis',
         ],
     ],
 
@@ -69,11 +90,26 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        
+        'pegawais' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Pegawai::class,
+        ],
+        
+        'pembelis' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Pembeli::class,
+        ],
+        
+        'penitips' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Penitip::class,
+        ],
+        
+        'organisasis' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Organisasi::class,
+        ],
     ],
 
     /*
@@ -99,6 +135,34 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        
+        'pegawais' => [
+            'provider' => 'pegawais',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        
+        'pembelis' => [
+            'provider' => 'pembelis',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        
+        'penitips' => [
+            'provider' => 'penitips',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        
+        'organisasis' => [
+            'provider' => 'organisasis',
+            'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
         ],

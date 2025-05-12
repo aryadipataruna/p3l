@@ -239,83 +239,83 @@
     <div class="container">
         <div class="signin-signup">
             {{-- Update action to your login route --}}
-            <form action="{{ route('login') }}" method="POST" class="sign-in-form">
+            <form action="{{ route('login') }}" method="POST" class="sign-in-form" id="signInForm"> {{-- Added id="signInForm" --}}
                 {{-- Include CSRF token for security if using Laravel Blade --}}
                 @csrf
                 <h2 class="title">Sign in</h2>
+                {{-- Error message display area --}}
+                <div id="signInErrorMessage" class="error-message"></div> {{-- Added error message div --}}
+
                 <div class="input-field">
-                    <i class="fas fa-user"></i>
+                    <i class="fas fa-envelope"></i> {{-- Changed icon to envelope for email --}}
                     {{-- Assuming your LoginController expects 'email' for login --}}
-                    <input type="text" name="email" placeholder="Email" required>
+                    <input type="email" name="email" placeholder="Email" required> {{-- Changed name to email --}}
                 </div>
                 <div class="input-field">
                     <i class="fas fa-lock"></i>
                     <input type="password" name="password" placeholder="Password" required>
                 </div>
-                {{-- Add a checkbox for 'remember' if your LoginController uses it --}}
-                {{-- <div class="input-field" style="border: none; background: none; margin-bottom: 0;">
-                     <input type="checkbox" name="remember" id="remember" style="width: auto; flex: none; margin-right: 5px;">
-                     <label for="remember" style="color: #444; font-weight: normal; font-size: 1rem;">Remember Me</label>
+                 {{-- Add remember me checkbox if needed --}}
+                 {{-- <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                    <label class="form-check-label" for="remember">Remember me</label>
                  </div> --}}
                 <input type="submit" value="Login" class="btn">
                 <p class="account-text">Don't have an account? <a href="#" id="sign-up-btn2">Sign up</a></p>
             </form>
 
-            {{-- The form action and input names will be set dynamically by JavaScript based on the selected role --}}
-            <form action="" method="POST" class="sign-up-form">
-                 {{-- Include CSRF token for security if using Laravel Blade --}}
+            {{-- Note: The sign-up form needs to be updated to match the required fields
+                 for the specific user type being registered (Pembeli, Penitip, Pegawai, or Organisasi)
+                 and should target the correct registration API endpoint (e.g., /api/pembeli/register).
+                 This example form is generic. --}}
+            <form action="" method="POST" class="sign-up-form" id="signUpForm"> {{-- Added id="signUpForm" --}}
                  @csrf
-                <h2 class="title">Sign up</h2>
+                 <h2 class="title">Sign up</h2>
+                 {{-- Error message display area --}}
+                 <div id="signUpErrorMessage" class="error-message"></div> {{-- Added error message div --}}
 
-                <div class="input-field">
-                    <i class="fas fa-user"></i>
-                    {{-- Using a generic name initially --}}
-                    <input type="text" name="generic_name" placeholder="Nama Lengkap" required data-generic-name="name">
-                </div>
-
+                 {{-- Example fields - Update based on the specific registration you are implementing --}}
                  <div class="input-field">
-                    <i class="fas fa-envelope"></i>
-                    {{-- Using a generic name initially --}}
-                    <input type="email" name="generic_email" placeholder="Email" required data-generic-name="email">
-                </div>
-
+                     <i class="fas fa-user"></i>
+                     <input type="text" name="generic_name" placeholder="Nama Lengkap" required data-generic-name="name">
+                 </div>
                  <div class="input-field">
-                    {{-- Icon for role selection --}}
-                    <i class="fas fa-user-tag"></i>
-                    {{-- Role selection dropdown --}}
-                    <select name="role" id="role-select" required>
-                        <option value="" disabled selected>Pilih Role</option> {{-- Default disabled option --}}
-                        <option value="pembeli">Pembeli</option>
-                        <option value="organisasi">Organisasi</option>
-                    </select>
-                </div>
-
-                <div class="input-field">
-                    <i class="fas fa-phone"></i>
-                     {{-- Using a generic name initially --}}
-                    <input type="text" name="generic_phone" placeholder="Nomor Telepon" required data-generic-name="phone">
-                </div>
-
-                <div class="input-field">
-                    <i class="fas fa-map-marker-alt"></i>
-                     {{-- Using a generic name initially --}}
-                    <input type="text" name="generic_address" placeholder="Alamat" required data-generic-name="address">
-                </div>
-
-                <div class="input-field">
-                    <i class="fas fa-lock"></i>
-                     {{-- Using a generic name initially --}}
-                    <input type="password" name="generic_password" placeholder="Password" required data-generic-name="password">
-                </div>
-
-                 {{-- Add hidden inputs for default values for nullable fields --}}
+                     <i class="fas fa-envelope"></i>
+                     <input type="email" name="generic_email" placeholder="Email" required data-generic-name="email">
+                 </div>
+                 <div class="input-field">
+                     <i class="fas fa-user-tag"></i>
+                     <select name="role" id="role-select" required>
+                         <option value="" disabled selected>Pilih Role</option> {{-- Default disabled option --}}
+                         <option value="pembeli">Pembeli</option>
+                         <option value="organisasi">Organisasi</option>
+                         {{-- Add other roles (penitip, pegawai) if they can register via this form --}}
+                     </select>
+                 </div>
+                 <div class="input-field">
+                     <i class="fas fa-phone"></i>
+                     <input type="text" name="generic_phone" placeholder="Nomor Telepon" required data-generic-name="phone">
+                 </div>
+                 <div class="input-field">
+                     <i class="fas fa-map-marker-alt"></i>
+                     <input type="text" name="generic_address" placeholder="Alamat" required data-generic-name="address">
+                 </div>
+                 <div class="input-field">
+                     <i class="fas fa-lock"></i>
+                     <input type="password" name="generic_password" placeholder="Password" required data-generic-name="password">
+                 </div>
+                  <div class="input-field">
+                     <i class="fas fa-lock"></i>
+                     <input type="password" name="password_confirmation" placeholder="Konfirmasi Password" required>
+                 </div>
+                 {{-- Add hidden inputs for default values for nullable fields based on role --}}
                  {{-- These will be updated by JavaScript based on the role --}}
                  <input type="hidden" name="generic_poin" value="0" data-generic-name="poin">
                  <input type="hidden" name="generic_saldo" value="0" data-generic-name="saldo">
 
 
                 <input type="submit" value="Sign Up" class="btn"> {{-- Changed button text back to Sign Up --}}
-                 <p class="account-text">Already have an account? <a href="#" id="sign-in-btn2">Sign in</a></p>
+                <p class="account-text">Already have an account? <a href="#" id="sign-in-btn2">Sign in</a></p>
             </form>
         </div>
 
@@ -343,13 +343,18 @@
         const sign_in_btn2 = document.querySelector("#sign-in-btn2");
         const sign_up_btn2 = document.querySelector("#sign-up-btn2");
 
-        // Get references to the sign-up form and the role select dropdown
-        const signUpForm = document.querySelector(".sign-up-form");
+        // Get references to the forms and error message divs
+        const signInForm = document.getElementById('signInForm'); // Get sign-in form by ID
+        const signUpForm = document.getElementById('signUpForm'); // Get sign-up form by ID
+        const signInErrorMessage = document.getElementById('signInErrorMessage'); // Get sign-in error div
+        const signUpErrorMessage = document.getElementById('signUpErrorMessage'); // Get sign-up error div
+
+         // Get references to the sign-up form specific elements for dynamic naming
         const roleSelect = document.querySelector("#role-select");
         const signUpInputs = signUpForm.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="hidden"]');
 
 
-        // Function to update the form action and input names based on the selected role
+        // Function to update the sign-up form action and input names based on the selected role
         function updateSignUpForm() {
             const selectedRole = roleSelect.value;
             let registrationRoute = '';
@@ -363,10 +368,10 @@
                         'name': 'NAMA_PEMBELI',
                         'email': 'EMAIL_PEMBELI',
                         'password': 'PASSWORD_PEMBELI',
-                        'phone': 'NO_PEMBELI',
+                        'phone': 'NO_PEMBELI', // Corrected name based on Pembeli model
                         'address': 'ALAMAT_PEMBELI',
                         'poin': 'POIN_PEMBELI', // Mapping for hidden poin field
-                        'saldo': 'SALDO_PEMBELI' // Mapping for hidden saldo field (if needed, adjust based on Pembeli model)
+                        // 'saldo': 'SALDO_PEMBELI' // Pembeli model doesn't have SALDO_PEMBELI
                     };
                     break;
                 case 'organisasi':
@@ -374,13 +379,37 @@
                      nameMapping = {
                         'name': 'NAMA_ORGANISASI',
                         'email': 'EMAIL_ORGANISASI',
-                        'phone': 'NOTELP_ORGANISASI',
+                        'phone': 'NOTELP_ORGANISASI', // Corrected name based on Organisasi model
                         'address': 'ALAMAT_ORGANISASI',
                         'password': 'PASSWORD_ORGANISASI',
-                        'poin': 'POIN_ORGANISASI', // Mapping for hidden poin field (if needed, adjust based on Organisasi model)
-                        'saldo': 'SALDO_ORGANISASI' // Mapping for hidden saldo field (if needed, adjust based on Organisasi model)
+                        // 'poin': 'POIN_ORGANISASI', // Organisasi model doesn't have POIN_ORGANISASI
+                        // 'saldo': 'SALDO_ORGANISASI' // Organisasi model doesn't have SALDO_ORGANISASI
                     };
                     break;
+                 // Add cases for 'penitip' and 'pegawai' if they can register here
+                 // case 'penitip':
+                 //     registrationRoute = '{{ route("penitip.store") }}';
+                 //     nameMapping = {
+                 //         'name': 'NAMA_PENITIP',
+                 //         'email': 'EMAIL_PENITIP', // Assuming Penitip has email for registration
+                 //         'phone': 'NOTELP_PENITIP', // Assuming Penitip has phone
+                 //         'address': 'ALAMAT_PENITIP',
+                 //         'password': 'PASSWORD_PENITIP',
+                 //         'poin': 'POIN_PENITIP',
+                 //         'saldo': 'SALDO_PENITIP'
+                 //     };
+                 //     break;
+                 // case 'pegawai':
+                 //      registrationRoute = '{{ route("pegawai.store") }}';
+                 //      nameMapping = {
+                 //          'name': 'NAMA_PEGAWAI',
+                 //          'email': 'EMAIL_PEGAWAI',
+                 //          'phone': 'NOTELP_PEGAWAI',
+                 //          'address': 'ALAMAT_PEGAWAI',
+                 //          'password': 'PASSWORD_PEGAWAI',
+                 //          // Pegawai also needs ID_JABATAN - you'd need another input or logic for this
+                 //      };
+                 //      break;
                 default:
                     // Set a default or handle the case where no role is selected
                     registrationRoute = '';
@@ -395,27 +424,33 @@
                 const genericName = input.getAttribute('data-generic-name');
                 if (genericName && nameMapping[genericName]) {
                     input.name = nameMapping[genericName];
+                    // Show or hide fields based on the selected role's requirements
+                    // For simplicity, we'll keep all fields visible for now, but you might
+                    // want to dynamically show/hide input-field divs here.
+                    input.parentElement.style.display = ''; // Show the parent input-field div
                 } else {
-                    // If no mapping is found for a generic name, you might want to
-                    // set a default name or handle it differently.
-                    // For now, it will keep its initial 'generic_...' name or become empty if no initial name.
-                     // Let's set it back to its generic name if no mapping exists for the selected role
-                     input.name = 'generic_' + genericName;
+                     // If no mapping is found for a generic name for the selected role, hide the field
+                     // or set its name back to generic if you need it for other roles
+                     if (genericName) {
+                         input.name = 'generic_' + genericName; // Reset name to generic
+                         // Hide the parent input-field div if it's not needed for this role
+                         // You'll need more specific logic here based on which fields are required for which role
+                         // For example, if 'poin' is only for pembeli, hide it for organisasi.
+                         // input.parentElement.style.display = 'none'; // Example: Hide the parent div
+                     }
                 }
 
                  // Handle default values for hidden fields if needed
                  if (input.type === 'hidden') {
                      const specificName = input.name;
-                     if (specificName === 'POIN_PEMBELI' || specificName === 'POIN_ORGANISASI') {
-                         input.value = '0'; // Default poin to 0
+                     if (specificName === 'POIN_PEMBELI' && selectedRole === 'pembeli') {
+                          input.value = '0'; // Default poin to 0 for Pembeli
                      }
-                     if (specificName === 'SALDO_PENITIP' || specificName === 'SALDO_ORGANISASI') {
-                          // Note: Penitip removed, but keeping saldo for Organisasi if applicable
-                          input.value = '0'; // Default saldo to 0
-                     }
-                      // Add other hidden field defaults here if necessary
+                      // Add other hidden field defaults here if necessary based on role
                  }
             });
+             // You might need additional logic here to show/hide specific input-field divs
+             // based on the selected role's required fields (e.g., hide phone/address for some roles)
         }
 
         // Add event listener to the role select dropdown to update the form action and input names on change
@@ -428,26 +463,209 @@
         // Event listener for the desktop "Sign up" button
         sign_up_btn.addEventListener("click", () => {
             container.classList.add("sign-up-mode");
+             // Reset sign-up form and error message when switching
+            signUpForm.reset();
+            signUpErrorMessage.textContent = '';
+             // Ensure form names are updated for the default/currently selected role
+             updateSignUpForm();
         });
 
         // Event listener for the desktop "Sign in" button
         sign_in_btn.addEventListener("click", () => {
             container.classList.remove("sign-up-mode");
+             // Reset sign-in form and error message when switching
+            signInForm.reset();
+            signInErrorMessage.textContent = '';
         });
 
         // Event listener for the mobile "Sign up" link
         sign_up_btn2.addEventListener("click", () => {
             container.classList.add("sign-up-mode2");
+             // Reset sign-up form and error message when switching
+            signUpForm.reset();
+            signUpErrorMessage.textContent = '';
+             // Ensure form names are updated for the default/currently selected role
+             updateSignUpForm();
         });
 
         // Event listener for the mobile "Sign in" link
         sign_in_btn2.addEventListener("click", () => {
             container.classList.remove("sign-up-mode2");
+            // Reset sign-in form and error message when switching
+            signInForm.reset();
+            signInErrorMessage.textContent = '';
         });
 
-        // Note: Form submissions are now handled by the browser using the 'action' and 'method' attributes.
-        // JavaScript is primarily used here for the panel switching animation and dynamically setting the form action and input names.
-        // Server-side validation and response handling will be done by your Laravel controllers.
+        // --- API Call Logic for Sign In ---
+        signInForm.addEventListener("submit", async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            // Clear previous error messages
+            signInErrorMessage.textContent = '';
+
+            const formData = new FormData(signInForm);
+            // Use the correct field names expected by your LoginController ('email', 'password')
+            const data = {
+                email: formData.get('email'),
+                password: formData.get('password'),
+                remember: formData.has('remember') ? formData.get('remember') : false // Handle optional remember me
+            };
+
+            try {
+                // Use the correct route name 'login' which points to /api/login
+                const response = await fetch(signInForm.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        // Include CSRF token if your login route is in web.php and uses csrf middleware
+                        // If it's purely an API route in api.php, you might not need this,
+                        // but it's safer to include if unsure or if your setup requires it.
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : ''
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) { // Check for response.ok (2xx status) and your custom success flag
+                    console.log('Login successful:', result);
+                    // Store the token in localStorage
+                    localStorage.setItem('api_token', result.data.token);
+                    // Optionally store user info and role
+                    localStorage.setItem('user_info', JSON.stringify(result.data.user));
+                    localStorage.setItem('user_role', result.data.role);
+
+
+                    // Redirect the user after successful login
+                    // You might redirect based on the user's role
+                    if (result.data.role === 'admin' || result.data.role === 'owner' || result.data.role === 'kepala gudang' || result.data.role === 'customer service' || result.data.role === 'hunter' || result.data.role === 'kurir') {
+                         window.location.href = '/adminPagePegawai'; // Example admin dashboard route
+                    } else if (result.data.role === 'pembeli') {
+                         window.location.href = '/home'; // Example buyer home page
+                    } else if (result.data.role === 'penitip') {
+                         window.location.href = '/penitip/dashboard'; // Example consignor dashboard
+                    } else if (result.data.role === 'organisasi') {
+                         window.location.href = '/organisasi/dashboard'; // Example organization dashboard
+                    } else {
+                         // Default redirect if role is unknown or not handled
+                         window.location.href = '/dashboard'; // Fallback dashboard
+                    }
+
+
+                } else {
+                    console.error('Login failed:', result.message);
+                    // Display error message to the user
+                    // Use the message from the API response if available, otherwise a generic one
+                    signInErrorMessage.textContent = result.message || 'Login failed. Please try again.';
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                // Handle network errors or other exceptions
+                signInErrorMessage.textContent = 'An error occurred. Please try again later.';
+            }
+        });
+
+         // --- API Call Logic for Sign Up ---
+         // Note: This is a generic example. You need to update the URL and
+         // field names to match the specific registration endpoint you are using
+         // (e.g., /api/pembeli/register, /api/organisasi/register, etc.)
+         // and the required fields for that user type.
+         // This logic now uses the dynamically set form action and input names.
+        signUpForm.addEventListener("submit", async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            // Clear previous error messages
+            signUpErrorMessage.textContent = '';
+
+            const formData = new FormData(signUpForm);
+            const data = Object.fromEntries(formData.entries());
+
+            // Basic client-side password confirmation check - Use dynamically set name
+            // Find the actual password input name
+            const passwordInput = signUpForm.querySelector('input[data-generic-name="password"]');
+            const passwordFieldName = passwordInput ? passwordInput.name : 'generic_password'; // Fallback to generic name
+
+            if (data[passwordFieldName] !== data.password_confirmation) {
+                signUpErrorMessage.textContent = "Passwords do not match!";
+                console.error("Passwords do not match!");
+                return;
+            }
+            // Remove password_confirmation before sending
+            delete data.password_confirmation;
+
+            // The registrationEndpoint is now set dynamically by updateSignUpForm()
+            const registrationEndpoint = signUpForm.action;
+
+            // Remove the 'role' field from the data sent to the registration endpoint
+            // as the backend store methods don't expect it directly in the model data.
+            // The role is used client-side to determine the endpoint.
+            delete data.role;
+
+            // Remove any fields that still have 'generic_' prefix, as they are not needed by the backend
+            const finalData = {};
+            for (const key in data) {
+                 if (!key.startsWith('generic_')) {
+                     finalData[key] = data[key];
+                 }
+            }
+
+
+            // Check if a registration endpoint was successfully set
+            if (!registrationEndpoint) {
+                 signUpErrorMessage.textContent = 'Please select a role to register.';
+                 console.error('Registration endpoint not set. Role not selected or invalid.');
+                 return;
+            }
+
+
+            try {
+                const response = await fetch(registrationEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                         // Include CSRF token if your registration route is in web.php and uses csrf middleware
+                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : ''
+                    },
+                    body: JSON.stringify(finalData) // Send the filtered data
+                });
+
+                const result = await response.json();
+
+                // Assuming your store method returns { status: true, message: "...", data: ... } on success
+                if (response.ok && result.status === true) {
+                    console.log('Registration successful:', result);
+                    // Handle successful registration (e.g., show success message, redirect to login)
+                    alert('Registration successful! Please sign in.'); // Simple alert
+                    // Optionally redirect to the sign-in form
+                    container.classList.remove("sign-up-mode"); // Switch back to sign-in view
+                    container.classList.remove("sign-up-mode2"); // For mobile view
+                    signInForm.reset(); // Clear sign-in form
+                    signInErrorMessage.textContent = ''; // Clear sign-in error
+                } else {
+                    console.error('Registration failed:', result.message);
+                     // Display error message to the user
+                    // Handle validation errors specifically if needed (e.g., result.errors)
+                    // If backend returns validation errors in 'errors' key
+                    if (result.errors) {
+                         let errorMessages = '';
+                         for (const field in result.errors) {
+                             errorMessages += result.errors[field].join(', ') + '\n';
+                         }
+                         signUpErrorMessage.textContent = 'Validation failed:\n' + errorMessages;
+                         console.error('Validation errors:', result.errors);
+                    } else {
+                         signUpErrorMessage.textContent = result.message || 'Registration failed. Please try again.';
+                    }
+                }
+            } catch (error) {
+                console.error('Error during registration:', error);
+                // Handle network or other errors
+                 signUpErrorMessage.textContent = 'An error occurred during registration. Please try again later.';
+            }
+        });
+
 
     </script>
 </body>
