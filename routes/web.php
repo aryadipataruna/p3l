@@ -32,3 +32,7 @@ Route::get('/adminPageOrganisasi', function () {
 Route::get('/detailBarang/{id}', function ($id) {
     return view('detailBarangPage', ['id' => $id]);
 })->name('detailBarang');
+
+Route::get('/passwordBiasa', fuction (){
+    return view('password.passwordTglLahir');
+})->name('passwordEmail');
