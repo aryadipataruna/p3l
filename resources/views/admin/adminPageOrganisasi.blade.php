@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Pegawai</title>
+    <title>Admin Dashboard - Organisasi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -359,14 +359,14 @@
     </div>
 
     <div class="container">
-        <h1 class="page-title">Data Pegawai - ReUse Mart</h1>
+        <h1 class="page-title">Data Organisasi - ReUse Mart</h1>
 
         <div class="filter-section">
             <label for="search">Filter Rows:</label>
-            {{-- Changed placeholder to reflect filtering by name or ID --}}
-            <input type="text" id="search" class="search-input" placeholder="Search By Name or ID Pegawai">
-            <button class="add-button" id="add-pegawai-button">
-                 <i class="fas fa-plus"></i> Tambah Pegawai
+            {{-- Placeholder reflects filtering by Name, Email, or ID --}}
+            <input type="text" id="search" class="search-input" placeholder="Search By Name, Email, or ID Organisasi">
+            <button class="add-button" id="add-organisasi-button">
+                 <i class="fas fa-plus"></i> Tambah Organisasi
             </button>
         </div>
 
@@ -374,93 +374,79 @@
             <thead>
                 <tr>
                     <th>Action</th>
-                    <th>ID Pegawai</th>
-                    <th>Nama Pegawai</th>
-                    <th>Email</th>
+                    <th>ID Organisasi</th>
+                    <th>Nama Organisasi</th>
+                    <th>Email Organisasi</th>
                     <th>Nomor Telepon</th>
-                    <th>Alamat</th>
-                    <th>ID Jabatan</th> {{-- Or Jabatan Name if joining tables --}}
-                    {{-- Add other relevant Pegawai columns here --}}
+                    <th>Alamat Organisasi</th>
+                    {{-- Add other relevant Organisasi columns here if needed --}}
                 </tr>
             </thead>
-            <tbody id="pegawai-table-body">
+            <tbody id="organisasi-table-body">
                 {{-- Data will be loaded here by JavaScript --}}
                  <tr>
-                    <td colspan="7" id="loading-message">Loading Pegawai data...</td>
+                    <td colspan="6" id="loading-message">Loading Organisasi data...</td>
                  </tr>
             </tbody>
         </table>
         <div id="status-message" class="status"></div> {{-- Area for status messages --}}
     </div>
 
-    <div id="addPegawaiModal" class="modal">
+    <div id="addOrganisasiModal" class="modal">
         <div class="modal-content">
             <span class="close-button add-close-button">&times;</span>
-            <h2>Tambah Pegawai Baru</h2>
+            <h2>Tambah Organisasi Baru</h2>
             <div id="addFormErrorMessages" class="form-error-messages"></div> {{-- Error message area for the form --}}
-            <form id="addPegawaiForm">
-                <label for="addIdJabatan">ID Jabatan:</label>
-                {{-- You might want a dropdown here populated with Jabatan options --}}
-                <input type="text" id="addIdJabatan" name="ID_JABATAN" required>
+            <form id="addOrganisasiForm">
+                {{-- ID_ORGANISASI is generated in backend, no input needed --}}
 
-                <label for="addNamaPegawai">Nama Pegawai:</label>
-                <input type="text" id="addNamaPegawai" name="NAMA_PEGAWAI" required>
+                <label for="addNamaOrganisasi">Nama Organisasi:</label>
+                <input type="text" id="addNamaOrganisasi" name="NAMA_ORGANISASI" required>
 
-                <label for="addTglLahirPegawai">Tanggal Lahir:</label>
-                <input type="date" id="addTglLahirPegawai" name="TGL_LAHIR_PEGAWAI" required>
+                <label for="addEmailOrganisasi">Email Organisasi:</label>
+                <input type="email" id="addEmailOrganisasi" name="EMAIL_ORGANISASI" required>
 
-                <label for="addNotelpPegawai">Nomor Telepon:</label>
-                <input type="text" id="addNotelpPegawai" name="NOTELP_PEGAWAI" required>
+                <label for="addPasswordOrganisasi">Password:</label>
+                <input type="password" id="addPasswordOrganisasi" name="PASSWORD_ORGANISASI" required minlength="8">
 
-                <label for="addEmailPegawai">Email:</label>
-                <input type="email" id="addEmailPegawai" name="EMAIL_PEGAWAI" required>
+                <label for="addNotelpOrganisasi">Nomor Telepon:</label>
+                <input type="text" id="addNotelpOrganisasi" name="NOTELP_ORGANISASI" required>
 
-                <label for="addPasswordPegawai">Password:</label>
-                <input type="password" id="addPasswordPegawai" name="PASSWORD_PEGAWAI" required minlength="8">
+                <label for="addAlamatOrganisasi">Alamat Organisasi:</label>
+                <input type="text" id="addAlamatOrganisasi" name="ALAMAT_ORGANISASI" required>
 
-                <label for="addAlamatPegawai">Alamat:</label>
-                <input type="text" id="addAlamatPegawai" name="ALAMAT_PEGAWAI" required>
-
-                <button type="submit">Tambah Pegawai</button>
+                <button type="submit">Tambah Organisasi</button>
             </form>
         </div>
     </div>
 
 
-    <div id="editPegawaiModal" class="modal">
+    <div id="editOrganisasiModal" class="modal">
         <div class="modal-content">
             <span class="close-button edit-close-button">&times;</span>
-            <h2>Edit Pegawai</h2>
+            <h2>Edit Organisasi</h2>
             <div id="editFormErrorMessages" class="form-error-messages"></div> {{-- Error message area for the form --}}
-            <form id="editPegawaiForm">
-                {{-- Hidden input for Pegawai ID --}}
-                <input type="hidden" id="editPegawaiId" name="ID_PEGAWAI">
+            <form id="editOrganisasiForm">
+                {{-- Hidden input for Organisasi ID --}}
+                <input type="hidden" id="editOrganisasiId" name="ID_ORGANISASI">
 
-                <label for="editIdJabatan">ID Jabatan:</label>
-                {{-- You might want a dropdown here populated with Jabatan options --}}
-                <input type="text" id="editIdJabatan" name="ID_JABATAN" required>
+                <label for="editNamaOrganisasi">Nama Organisasi:</label>
+                <input type="text" id="editNamaOrganisasi" name="NAMA_ORGANISASI" required>
 
-                <label for="editNamaPegawai">Nama Pegawai:</label>
-                <input type="text" id="editNamaPegawai" name="NAMA_PEGAWAI" required>
-
-                 <label for="editTglLahirPegawai">Tanggal Lahir:</label>
-                <input type="date" id="editTglLahirPegawai" name="TGL_LAHIR_PEGAWAI" required>
-
-                <label for="editNotelpPegawai">Nomor Telepon:</label>
-                <input type="text" id="editNotelpPegawai" name="NOTELP_PEGAWAI" required>
-
-                <label for="editEmailPegawai">Email:</label>
-                <input type="email" id="editEmailPegawai" name="EMAIL_PEGAWAI" required>
-
-                <label for="editAlamatPegawai">Alamat:</label>
-                <input type="text" id="editAlamatPegawai" name="ALAMAT_PEGAWAI" required>
+                <label for="editEmailOrganisasi">Email Organisasi:</label>
+                <input type="email" id="editEmailOrganisasi" name="EMAIL_ORGANISASI" required>
 
                 {{-- Password field (optional for update, handle carefully in backend) --}}
-                <label for="editPasswordPegawai">Password (Optional):</label>
-                <input type="password" id="editPasswordPegawai" name="PASSWORD_PEGAWAI" minlength="8">
+                <label for="editPasswordOrganisasi">Password (Optional):</label>
+                <input type="password" id="editPasswordOrganisasi" name="PASSWORD_ORGANISASI" minlength="8">
 
+                <label for="editNotelpOrganisasi">Nomor Telepon:</label>
+                <input type="text" id="editNotelpOrganisasi" name="NOTELP_ORGANISASI" required>
 
-                <button type="submit">Update Pegawai</button>
+                <label for="editAlamatOrganisasi">Alamat Organisasi:</label>
+                <input type="text" id="editAlamatOrganisasi" name="ALAMAT_ORGANISASI" required>
+
+                <button type="submit">Update Organisasi</button>
             </form>
         </div>
     </div>
@@ -468,33 +454,32 @@
 
     <script>
         // Get reference to the table body and status message div
-        const pegawaiTableBody = document.querySelector('#pegawai-table-body');
+        const organisasiTableBody = document.querySelector('#organisasi-table-body');
         const loadingMessage = document.querySelector('#loading-message');
         const statusMessageDiv = document.getElementById('status-message');
 
         // Get references to Add modal elements
-        const addPegawaiModal = document.getElementById('addPegawaiModal');
-        const addCloseButton = addPegawaiModal.querySelector('.close-button');
-        const addPegawaiForm = document.getElementById('addPegawaiForm');
+        const addOrganisasiModal = document.getElementById('addOrganisasiModal');
+        const addCloseButton = addOrganisasiModal.querySelector('.close-button');
+        const addOrganisasiForm = document.getElementById('addOrganisasiForm');
         const addFormErrorMessages = document.getElementById('addFormErrorMessages');
-        const addPegawaiButton = document.getElementById('add-pegawai-button'); // Reference to the "Tambah Pegawai" button
+        const addOrganisasiButton = document.getElementById('add-organisasi-button'); // Reference to the "Tambah Organisasi" button
 
 
         // Get references to Edit modal elements
-        const editPegawaiModal = document.getElementById('editPegawaiModal');
-        const editCloseButton = editPegawaiModal.querySelector('.close-button');
-        const editPegawaiForm = document.getElementById('editPegawaiForm');
+        const editOrganisasiModal = document.getElementById('editOrganisasiModal');
+        const editCloseButton = editOrganisasiModal.querySelector('.close-button');
+        const editOrganisasiForm = document.getElementById('editOrganisasiForm');
         const editFormErrorMessages = document.getElementById('editFormErrorMessages');
 
         // Get references to Edit form input fields
-        const editPegawaiIdInput = document.getElementById('editPegawaiId');
-        const editIdJabatanInput = document.getElementById('editIdJabatan');
-        const editNamaPegawaiInput = document.getElementById('editNamaPegawai');
-        const editTglLahirPegawaiInput = document.getElementById('editTglLahirPegawai'); // Added date input
-        const editNotelpPegawaiInput = document.getElementById('editNotelpPegawai');
-        const editEmailPegawaiInput = document.getElementById('editEmailPegawai');
-        const editAlamatPegawaiInput = document.getElementById('editAlamatPegawai');
-        const editPasswordPegawaiInput = document.getElementById('editPasswordPegawai');
+        const editOrganisasiIdInput = document.getElementById('editOrganisasiId');
+        const editNamaOrganisasiInput = document.getElementById('editNamaOrganisasi');
+        const editEmailOrganisasiInput = document.getElementById('editEmailOrganisasi');
+        const editPasswordOrganisasiInput = document.getElementById('editPasswordOrganisasi');
+        const editNotelpOrganisasiInput = document.getElementById('editNotelpOrganisasi');
+        const editAlamatOrganisasiInput = document.getElementById('editAlamatOrganisasi');
+
 
         // Get reference to the search input
         const searchInput = document.getElementById('search');
@@ -514,11 +499,11 @@
         }
 
 
-        // Function to fetch and display Pegawai data
-        async function fetchPegawaiData() {
+        // Function to fetch and display Organisasi data
+        async function fetchOrganisasiData() {
             try {
                 // Show loading message
-                pegawaiTableBody.innerHTML = `<tr><td colspan="7" id="loading-message">Loading Pegawai data...</td></tr>`;
+                organisasiTableBody.innerHTML = `<tr><td colspan="6" id="loading-message">Loading Organisasi data...</td></tr>`;
                 statusMessageDiv.style.display = 'none'; // Hide any previous status messages
 
 
@@ -535,8 +520,8 @@
 
 
                 // Fetch data from the API route
-                // Adjust the URL if your API route is different from /api/pegawai/authenticated
-                const response = await fetch('/api/pegawai/authenticated', {
+                // Adjust the URL if your API route is different from /api/organisasi/authenticated
+                const response = await fetch('/api/organisasi/authenticated', {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
@@ -568,55 +553,54 @@
                 // Check if the API response indicates success and contains data
                 // Assuming your API returns { status: true, data: [...] } on success
                 if (responseData.status === true && responseData.data) {
-                    const pegawaiData = responseData.data;
+                    const organisasiData = responseData.data;
 
                     // Store the fetched data globally or in a data attribute for filtering
                     // This allows filtering without re-fetching every time
-                    pegawaiTableBody.dataset.allPegawai = JSON.stringify(pegawaiData);
+                    organisasiTableBody.dataset.allOrganisasi = JSON.stringify(organisasiData);
 
                     // Populate the table with fetched data
-                    renderPegawaiTable(pegawaiData);
+                    renderOrganisasiTable(organisasiData);
 
 
                 } else {
                     // Handle API response indicating failure (status: false)
                     console.error('API response indicates failure:', responseData);
-                    pegawaiTableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:red;">Failed to load data: ${responseData.message || 'Unknown error'}</td></tr>`;
+                    organisasiTableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Failed to load data: ${responseData.message || 'Unknown error'}</td></tr>`;
                 }
 
             } catch (error) {
                 // Handle network errors or other exceptions during fetch
-                console.error('Error fetching Pegawai data:', error);
-                pegawaiTableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:red;">Error loading data. Please check console for details.</td></tr>`;
+                console.error('Error fetching Organisasi data:', error);
+                organisasiTableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red;">Error loading data. Please check console for details.</td></tr>`;
                 showStatusMessage(`Error loading data: ${error.message}`, 'error');
             }
         }
 
-        // Function to render the pegawai table with provided data
-        function renderPegawaiTable(pegawaiData) {
+        // Function to render the organisasi table with provided data
+        function renderOrganisasiTable(organisasiData) {
              // Clear the table body
-            pegawaiTableBody.innerHTML = '';
+            organisasiTableBody.innerHTML = '';
 
-            if (pegawaiData.length > 0) {
-                pegawaiData.forEach(pegawai => {
+            if (organisasiData.length > 0) {
+                organisasiData.forEach(organisasi => {
                     const row = document.createElement('tr');
-                    // Store the Pegawai ID on the row for easy access
-                    row.dataset.pegawaiId = pegawai.ID_PEGAWAI;
+                    // Store the Organisasi ID on the row for easy access
+                    row.dataset.organisasiId = organisasi.ID_ORGANISASI;
 
                     row.innerHTML = `
                         <td class="action-buttons">
-                            <a href="#" class="edit-btn" data-id="${pegawai.ID_PEGAWAI}">Edit</a>
-                            <a href="#" class="delete-btn" data-id="${pegawai.ID_PEGAWAI}">Delete</a>
+                            <a href="#" class="edit-btn" data-id="${organisasi.ID_ORGANISASI}">Edit</a>
+                            <a href="#" class="delete-btn" data-id="${organisasi.ID_ORGANISASI}">Delete</a>
                         </td>
-                        <td>${pegawai.ID_PEGAWAI}</td>
-                        <td>${pegawai.NAMA_PEGAWAI}</td>
-                        <td>${pegawai.EMAIL_PEGAWAI}</td>
-                        <td>${pegawai.NOTELP_PEGAWAI}</td>
-                        <td>${pegawai.ALAMAT_PEGAWAI}</td>
-                        <td>${pegawai.ID_JABATAN}</td>
+                        <td>${organisasi.ID_ORGANISASI}</td>
+                        <td>${organisasi.NAMA_ORGANISASI}</td>
+                        <td>${organisasi.EMAIL_ORGANISASI}</td>
+                        <td>${organisasi.NOTELP_ORGANISASI}</td>
+                        <td>${organisasi.ALAMAT_ORGANISASI}</td>
                         {{-- Add other data cells based on your API response --}}
                     `;
-                    pegawaiTableBody.appendChild(row);
+                    organisasiTableBody.appendChild(row);
                 });
 
                 // Re-attach event listeners to the new buttons after populating the table
@@ -624,7 +608,7 @@
 
             } else {
                 // Display a message if no data is available
-                pegawaiTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No Pegawai data found.</td></tr>';
+                organisasiTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No Organisasi data found.</td></tr>';
             }
         }
 
@@ -635,7 +619,7 @@
             document.querySelectorAll('.action-buttons .edit-btn').forEach(button => {
                 button.addEventListener('click', async (event) => { // Made async to fetch data
                     event.preventDefault(); // Prevent default link behavior
-                    const pegawaiId = event.target.dataset.id; // Get ID from data attribute
+                    const organisasiId = event.target.dataset.id; // Get ID from data attribute
 
                     // Clear previous error messages in the form
                     editFormErrorMessages.textContent = '';
@@ -650,9 +634,9 @@
                     }
 
                     try {
-                        // Fetch the specific Pegawai data for editing
-                        // Assuming your route is /api/pegawai/authenticated/{id} for fetching a single record
-                        const fetchUrl = `/api/pegawai/authenticated/${pegawaiId}`;
+                        // Fetch the specific Organisasi data for editing
+                        // Assuming your route is /api/organisasi/authenticated/{id} for fetching a single record
+                        const fetchUrl = `/api/organisasi/authenticated/${organisasiId}`;
                         const response = await fetch(fetchUrl, {
                             method: 'GET',
                             headers: {
@@ -672,38 +656,36 @@
                             } else {
                                 // Handle other HTTP errors
                                 const errorData = await response.json();
-                                showStatusMessage(`Failed to fetch Pegawai data for editing: ${errorData.message || response.statusText}`, 'error');
-                                console.error('Error fetching Pegawai data for editing:', errorData);
+                                showStatusMessage(`Failed to fetch Organisasi data for editing: ${errorData.message || response.statusText}`, 'error');
+                                console.error('Error fetching Organisasi data for editing:', errorData);
                             }
                             return; // Stop execution
                         }
 
                         const result = await response.json();
 
-                        // Assuming your show method returns { status: true, data: { ...pegawai } }
+                        // Assuming your show method returns { status: true, data: { ...organisasi } }
                         if (result.status === true && result.data) {
-                            const pegawaiData = result.data;
+                            const organisasiData = result.data;
 
                             // Populate the edit form with the fetched data
-                            editPegawaiIdInput.value = pegawaiData.ID_PEGAWAI;
-                            editIdJabatanInput.value = pegawaiData.ID_JABATAN;
-                            editNamaPegawaiInput.value = pegawaiData.NAMA_PEGAWAI;
-                            editTglLahirPegawaiInput.value = pegawaiData.TGL_LAHIR_PEGAWAI; // Populate date input
-                            editNotelpPegawaiInput.value = pegawaiData.NOTELP_PEGAWAI;
-                            editEmailPegawaiInput.value = pegawaiData.EMAIL_PEGAWAI;
-                            editAlamatPegawaiInput.value = pegawaiData.ALAMAT_PEGAWAI;
+                            editOrganisasiIdInput.value = organisasiData.ID_ORGANISASI;
+                            editNamaOrganisasiInput.value = organisasiData.NAMA_ORGANISASI;
+                            editEmailOrganisasiInput.value = organisasiData.EMAIL_ORGANISASI;
+                            editNotelpOrganisasiInput.value = organisasiData.NOTELP_ORGANISASI;
+                            editAlamatOrganisasiInput.value = organisasiData.ALAMAT_ORGANISASI;
                             // Do NOT populate the password field for security reasons
 
                             // Show the modal
-                            editPegawaiModal.style.display = 'flex'; // Use flex to center
+                            editOrganisasiModal.style.display = 'flex'; // Use flex to center
                         } else {
                              console.error('API response indicates failure when fetching data for editing:', result.message);
-                             showStatusMessage(`Failed to fetch Pegawai data: ${result.message || 'Unknown error'}`, 'error');
+                             showStatusMessage(`Failed to fetch Organisasi data: ${result.message || 'Unknown error'}`, 'error');
                         }
 
                     } catch (error) {
-                        console.error('Error fetching Pegawai data for editing:', error);
-                        showStatusMessage(`Error fetching Pegawai data for editing: ${error.message}`, 'error');
+                        console.error('Error fetching Organisasi data for editing:', error);
+                        showStatusMessage(`Error fetching Organisasi data for editing: ${error.message}`, 'error');
                     }
                 });
             });
@@ -712,11 +694,11 @@
              document.querySelectorAll('.action-buttons .delete-btn').forEach(button => {
                 button.addEventListener('click', async (event) => { // Made async to use await
                     event.preventDefault(); // Prevent default link behavior
-                    const pegawaiId = event.target.dataset.id; // Get ID from data attribute
+                    const organisasiId = event.target.dataset.id; // Get ID from data attribute
                     const row = event.target.closest('tr'); // Get the parent table row
 
-                    // Corrected: Use pegawaiId in the confirm message
-                    if (confirm('Are you sure you want to delete Pegawai ID: ' + pegawaiId + '?')) {
+                    // Corrected: Use organisasiId in the confirm message
+                    if (confirm('Are you sure you want to delete Organisasi ID: ' + organisasiId + '?')) {
                         // User confirmed deletion
 
                         // Get the token from localStorage
@@ -729,8 +711,8 @@
                         }
 
                         try {
-                            // Corrected: Use pegawaiId in the delete API URL
-                            const deleteUrl = `/api/pegawai/delete/authenticated/${pegawaiId}`; // Use the correct route path
+                            // Corrected: Use organisasiId in the delete API URL
+                            const deleteUrl = `/api/organisasi/delete/authenticated/${organisasiId}`; // Use the correct route path
 
                             // Send the DELETE request
                             const response = await fetch(deleteUrl, {
@@ -748,16 +730,16 @@
                             // Check if the API call was successful
                             // Assuming your delete method returns { status: true, message: ... } on success
                             if (response.ok && result.status === true) {
-                                showStatusMessage('Pegawai successfully deleted!', 'success');
+                                showStatusMessage('Organisasi successfully deleted!', 'success');
                                 console.log('Delete successful:', result.message);
                                 // Remove the row from the table
                                 row.remove();
                                 // Update the stored data after deletion
-                                updateStoredDataAfterDeletion(pegawaiId);
+                                updateStoredDataAfterDeletion(organisasiId);
                             } else {
                                 // Handle API response indicating failure
                                 console.error('Delete failed:', result.message);
-                                showStatusMessage(`Failed to delete Pegawai: ${result.message || 'Unknown error'}`, 'error');
+                                showStatusMessage(`Failed to delete Organisasi: ${result.message || 'Unknown error'}`, 'error');
 
                                 // If authentication failed (e.g., 401 Unauthorized), redirect to login
                                 if (response.status === 401) {
@@ -771,7 +753,7 @@
                         } catch (error) {
                             // Handle network errors or other exceptions during fetch
                             console.error('Error during delete:', error);
-                            showStatusMessage(`Error deleting Pegawai: ${error.message}`, 'error');
+                            showStatusMessage(`Error deleting Organisasi: ${error.message}`, 'error');
                         }
                     }
                 });
@@ -780,9 +762,9 @@
 
         // Function to update the stored data after a successful deletion
         function updateStoredDataAfterDeletion(deletedId) {
-            const allPegawaiData = JSON.parse(pegawaiTableBody.dataset.allPegawai || '[]');
-            const updatedData = allPegawaiData.filter(pegawai => pegawai.ID_PEGAWAI !== deletedId);
-            pegawaiTableBody.dataset.allPegawai = JSON.stringify(updatedData);
+            const allOrganisasiData = JSON.parse(organisasiTableBody.dataset.allOrganisasi || '[]');
+            const updatedData = allOrganisasiData.filter(organisasi => organisasi.ID_ORGANISASI !== deletedId);
+            organisasiTableBody.dataset.allOrganisasi = JSON.stringify(updatedData);
             // No need to re-render the table here as the row is already removed
             // If search is active, re-apply the filter
              if (searchInput.value) {
@@ -791,13 +773,13 @@
         }
 
 
-        // --- Add Pegawai Button Listener ---
-        addPegawaiButton.addEventListener('click', () => {
+        // --- Add Organisasi Button Listener ---
+        addOrganisasiButton.addEventListener('click', () => {
             // Clear the form and any previous error messages
-            addPegawaiForm.reset();
+            addOrganisasiForm.reset();
             addFormErrorMessages.textContent = '';
             // Show the add modal
-            addPegawaiModal.style.display = 'flex';
+            addOrganisasiModal.style.display = 'flex';
         });
 
 
@@ -809,11 +791,11 @@
                 if (modal) {
                     modal.style.display = 'none'; // Hide the modal
                     // Reset the form and clear error messages for the specific modal
-                    if (modal.id === 'addPegawaiModal') {
-                        addPegawaiForm.reset();
+                    if (modal.id === 'addOrganisasiModal') {
+                        addOrganisasiForm.reset();
                         addFormErrorMessages.textContent = '';
-                    } else if (modal.id === 'editPegawaiModal') {
-                        editPegawaiForm.reset();
+                    } else if (modal.id === 'editOrganisasiModal') {
+                        editOrganisasiForm.reset();
                         editFormErrorMessages.textContent = '';
                     }
                 }
@@ -826,11 +808,11 @@
             if (event.target.classList.contains('modal')) {
                  // Determine which modal was clicked outside of
                  const modal = event.target;
-                 if (modal.id === 'addPegawaiModal') {
-                     addPegawaiForm.reset();
+                 if (modal.id === 'addOrganisasiModal') {
+                     addOrganisasiForm.reset();
                      addFormErrorMessages.textContent = '';
-                 } else if (modal.id === 'editPegawaiModal') {
-                     editPegawaiForm.reset();
+                 } else if (modal.id === 'editOrganisasiModal') {
+                     editOrganisasiForm.reset();
                      editFormErrorMessages.textContent = '';
                  }
                  modal.style.display = 'none'; // Hide the modal
@@ -839,7 +821,7 @@
 
 
         // --- Add Form Submission Listener ---
-        addPegawaiForm.addEventListener('submit', async (event) => {
+        addOrganisasiForm.addEventListener('submit', async (event) => {
             event.preventDefault(); // Prevent default form submission
 
             // Clear previous error messages
@@ -854,20 +836,18 @@
             }
 
             // Collect data from the form
-            const newPegawaiData = {
-                ID_JABATAN: document.getElementById('addIdJabatan').value,
-                NAMA_PEGAWAI: document.getElementById('addNamaPegawai').value,
-                TGL_LAHIR_PEGAWAI: document.getElementById('addTglLahirPegawai').value,
-                NOTELP_PEGAWAI: document.getElementById('addNotelpPegawai').value,
-                EMAIL_PEGAWAI: document.getElementById('addEmailPegawai').value,
-                PASSWORD_PEGAWAI: document.getElementById('addPasswordPegawai').value,
-                ALAMAT_PEGAWAI: document.getElementById('addAlamatPegawai').value,
+            const newOrganisasiData = {
+                NAMA_ORGANISASI: document.getElementById('addNamaOrganisasi').value,
+                EMAIL_ORGANISASI: document.getElementById('addEmailOrganisasi').value,
+                PASSWORD_ORGANISASI: document.getElementById('addPasswordOrganisasi').value,
+                NOTELP_ORGANISASI: document.getElementById('addNotelpOrganisasi').value,
+                ALAMAT_ORGANISASI: document.getElementById('addAlamatOrganisasi').value,
             };
 
             try {
                 // Construct the create API URL
-                // Assuming your create route is /api/pegawai/store/authenticated
-                const createUrl = '/api/pegawai/create/authenticated'; // Use the renamed route
+                // Assuming your create route is /api/organisasi/create/authenticated
+                const createUrl = '/api/organisasi/create/authenticated'; // Use the correct route
 
                 // Send the POST request
                 const response = await fetch(createUrl, {
@@ -879,7 +859,7 @@
                          // Include X-CSRF-TOKEN if your API route uses web middleware
                          // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : ''
                     },
-                    body: JSON.stringify(newPegawaiData) // Send new data in the body
+                    body: JSON.stringify(newOrganisasiData) // Send new data in the body
                 });
 
                 const result = await response.json();
@@ -887,12 +867,12 @@
                 // Check if the API call was successful
                  // Assuming your store method returns { status: true, message: ... } on success
                 if (response.ok && result.status === true) {
-                    showStatusMessage('Pegawai successfully added!', 'success');
+                    showStatusMessage('Organisasi successfully added!', 'success');
                     console.log('Add successful:', result.message);
                     // Hide the modal and refresh the table data
-                    addPegawaiModal.style.display = 'none';
-                    addPegawaiForm.reset();
-                    fetchPegawaiData(); // Refresh the table to show the new entry
+                    addOrganisasiModal.style.display = 'none';
+                    addOrganisasiForm.reset();
+                    fetchOrganisasiData(); // Refresh the table to show the new entry
                 } else {
                     // Handle API response indicating failure
                     console.error('Add failed:', result.message);
@@ -921,20 +901,20 @@
             } catch (error) {
                 // Handle network errors or other exceptions during fetch
                 console.error('Error during add:', error);
-                addFormErrorMessages.textContent = `Error adding Pegawai: ${error.message}`;
-                showStatusMessage(`Error adding Pegawai: ${error.message}`, 'error');
+                addFormErrorMessages.textContent = `Error adding Organisasi: ${error.message}`;
+                showStatusMessage(`Error adding Organisasi: ${error.message}`, 'error');
             }
         });
 
 
         // --- Edit Form Submission Listener ---
-        editPegawaiForm.addEventListener('submit', async (event) => {
+        editOrganisasiForm.addEventListener('submit', async (event) => {
             event.preventDefault(); // Prevent default form submission
 
             // Clear previous error messages
             editFormErrorMessages.textContent = '';
 
-            const pegawaiId = editPegawaiIdInput.value; // Get the ID from the hidden input
+            const organisasiId = editOrganisasiIdInput.value; // Get the ID from the hidden input
             const token = localStorage.getItem('api_token');
 
              if (!token) {
@@ -945,24 +925,22 @@
 
             // Collect updated data from the form
             const updatedData = {
-                ID_JABATAN: editIdJabatanInput.value, // Use the correct field name
-                NAMA_PEGAWAI: editNamaPegawaiInput.value, // Use the correct field name
-                TGL_LAHIR_PEGAWAI: editTglLahirPegawaiInput.value, // Get date value
-                NOTELP_PEGAWAI: editNotelpPegawaiInput.value, // Use the correct field name
-                EMAIL_PEGAWAI: editEmailPegawaiInput.value, // Use the correct field name
-                ALAMAT_PEGAWAI: editAlamatPegawaiInput.value, // Use the correct field name
+                NAMA_ORGANISASI: editNamaOrganisasiInput.value,
+                EMAIL_ORGANISASI: editEmailOrganisasiInput.value,
+                NOTELP_ORGANISASI: editNotelpOrganisasiInput.value,
+                ALAMAT_ORGANISASI: editAlamatOrganisasiInput.value,
             };
 
             // Only include password if it was provided in the form
             // Your backend controller should handle hashing if password is sent
-            if (editPasswordPegawaiInput.value) {
-                 updatedData.PASSWORD_PEGAWAI = editPasswordPegawaiInput.value;
+            if (editPasswordOrganisasiInput.value) {
+                 updatedData.PASSWORD_ORGANISASI = editPasswordOrganisasiInput.value;
             }
 
 
             try {
                 // Construct the update API URL
-                const updateUrl = `/api/pegawai/update/authenticated/${pegawaiId}`; // Use the correct route path and ID
+                const updateUrl = `/api/organisasi/update/authenticated/${organisasiId}`; // Use the correct route path and ID
 
                 // Send the PUT request
                 const response = await fetch(updateUrl, {
@@ -982,12 +960,12 @@
                 // Check if the API call was successful
                  // Assuming your update method returns { status: true, message: ... } on success
                 if (response.ok && result.status === true) {
-                    showStatusMessage('Pegawai successfully updated!', 'success');
+                    showStatusMessage('Organisasi successfully updated!', 'success');
                     console.log('Update successful:', result.message);
                     // Hide the modal and refresh the table data
-                    editPegawaiModal.style.display = 'none';
-                    editPegawaiForm.reset();
-                    fetchPegawaiData(); // Refresh the table
+                    editOrganisasiModal.style.display = 'none';
+                    editOrganisasiForm.reset();
+                    fetchOrganisasiData(); // Refresh the table
                 } else {
                     // Handle API response indicating failure
                     console.error('Update failed:', result.message);
@@ -1016,8 +994,8 @@
             } catch (error) {
                 // Handle network errors or other exceptions during fetch
                 console.error('Error during update:', error);
-                editFormErrorMessages.textContent = `Error updating Pegawai: ${error.message}`;
-                showStatusMessage(`Error updating Pegawai: ${error.message}`, 'error');
+                editFormErrorMessages.textContent = `Error updating Organisasi: ${error.message}`;
+                showStatusMessage(`Error updating Organisasi: ${error.message}`, 'error');
             }
         });
 
@@ -1026,7 +1004,7 @@
 
         function filterTable() {
             const searchTerm = searchInput.value.toLowerCase();
-            const rows = pegawaiTableBody.querySelectorAll('tr');
+            const rows = organisasiTableBody.querySelectorAll('tr');
 
             rows.forEach(row => {
                 // Skip the loading message row if it's still there
@@ -1035,16 +1013,20 @@
                     return;
                 }
 
-                // Get the text content of the relevant cells (ID and Name)
+                // Get the text content of the relevant cells (ID, Name, Email)
                 const idCell = row.cells[1]; // Assuming ID is the second cell (index 1)
                 const nameCell = row.cells[2]; // Assuming Name is the third cell (index 2)
+                const emailCell = row.cells[3]; // Assuming Email is the fourth cell (index 3)
 
-                if (idCell && nameCell) {
+
+                if (idCell && nameCell && emailCell) {
                      const idText = idCell.textContent.toLowerCase();
                      const nameText = nameCell.textContent.toLowerCase();
+                     const emailText = emailCell.textContent.toLowerCase();
 
-                     // Check if the search term is included in either the ID or the Name
-                     if (idText.includes(searchTerm) || nameText.includes(searchTerm)) {
+
+                     // Check if the search term is included in the ID, Name, or Email
+                     if (idText.includes(searchTerm) || nameText.includes(searchTerm) || emailText.includes(searchTerm)) {
                          row.style.display = ''; // Show the row
                      } else {
                          row.style.display = 'none'; // Hide the row
@@ -1059,7 +1041,7 @@
 
         // --- Initial Data Load ---
         // Fetch data when the page loads
-        fetchPegawaiData();
+        fetchOrganisasiData();
 
     </script>
 

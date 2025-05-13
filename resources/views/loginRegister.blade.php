@@ -528,35 +528,31 @@
 
                 const result = await response.json();
 
-                if (response.ok && result.success) { // Check for response.ok (2xx status) and your custom success flag
+                if (response.ok && result.success) { // Check for successful HTTP status and your custom success flag
                     console.log('Login successful:', result);
-                    // Store the token in localStorage
+                    // Store the token and user info
                     localStorage.setItem('api_token', result.data.token);
-                    // Optionally store user info and role
                     localStorage.setItem('user_info', JSON.stringify(result.data.user));
                     localStorage.setItem('user_role', result.data.role);
 
-
-                    // Redirect the user after successful login
-                    // You might redirect based on the user's role
-                    if (result.data.role === 'admin' || result.data.role === 'owner' || result.data.role === 'kepala gudang' || result.data.role === 'customer service' || result.data.role === 'hunter' || result.data.role === 'kurir') {
-                         window.location.href = '/adminPagePegawai'; // Example admin dashboard route
+                    // Redirect based on role
+                    if (result.data.role === 'admin') {
+                        window.location.href = '/adminPagePegawai'; // Example admin dashboard route
                     } else if (result.data.role === 'pembeli') {
-                         window.location.href = '/home'; // Example buyer home page
+                        window.location.href = '/home'; // Example buyer home page
                     } else if (result.data.role === 'penitip') {
-                         window.location.href = '/penitip/dashboard'; // Example consignor dashboard
+                        window.location.href = '/penitipDashboard'; // Example consignor dashboard
                     } else if (result.data.role === 'organisasi') {
-                         window.location.href = '/organisasi/dashboard'; // Example organization dashboard
+                        window.location.href = '/organisasiDashboard'; // Example organization dashboard
+                    } else if (result.data.role === 'owner') {
+                        window.location.href = '/ownerDashboard';
                     } else {
-                         // Default redirect if role is unknown or not handled
-                         window.location.href = '/dashboard'; // Fallback dashboard
+                        // Default redirect if role is unknown or not handled
+                        window.location.href = '/dashboard'; // Fallback dashboard
                     }
-
-
                 } else {
+                    // Handle failed login
                     console.error('Login failed:', result.message);
-                    // Display error message to the user
-                    // Use the message from the API response if available, otherwise a generic one
                     signInErrorMessage.textContent = result.message || 'Login failed. Please try again.';
                 }
             } catch (error) {

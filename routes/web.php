@@ -25,6 +25,10 @@ Route::get('/adminPagePegawai', function () {
     return view('admin.adminPagePegawai');
 })->name('adminPagePegawai');
 
+Route::get('/adminPageOrganisasi', function () {
+    return view('admin.adminPageOrganisasi');
+})->name('adminPageOrganisasi');
+
 Route::get('/detailBarang/{id}', function ($id) {
     return view('detailBarangPage', ['id' => $id]);
 })->name('detailBarang');
