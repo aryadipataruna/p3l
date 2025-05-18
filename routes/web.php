@@ -85,3 +85,6 @@ Route::post('/cart/checkout', [PenjualanController::class, 'checkout'])->name('c
 
 // PDF Nota Route
 Route::get('/penitip/nota/{id}', [PenitipController::class, 'generateNota'])->name('penitip.nota');
+Route::post('/register/owner', [OwnerController::class, 'store'])->name('owner.store');
+Route::post('/register/cs', [CsController::class, 'store'])->name('cs.store');
+Route::post('/register/admin', [AdminController::class, 'store'])->name('admin.store');

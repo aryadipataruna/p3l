@@ -150,4 +150,10 @@ Route::middleware(['auth:sanctum', 'role:penitip'])->group(function () {
     Route::get('/penitip/profile', [PenitipController::class, 'profile'])->name('penitip.profile');
 });
 
+// Password Reset Routes...
+Route::get('password/reset', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('password/email', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('password/reset/{token}', [App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update');
+
 Route::get('/profile', [PenitipController::class, 'profilePenitip'])->middleware('auth:sanctum')->name('penitip.profile');
