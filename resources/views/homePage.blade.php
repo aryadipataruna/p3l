@@ -27,6 +27,12 @@
             height: 100%; /* Make cards fill height in grid */
             display: flex;
             flex-direction: column;
+            cursor: pointer; /* Add cursor pointer to indicate clickability */
+            transition: transform 0.2s ease-in-out; /* Add a slight hover effect */
+        }
+        .card-barang:hover {
+            transform: translateY(-5px); /* Lift card slightly on hover */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Add shadow on hover */
         }
         .card-barang img {
              width: 100%;
@@ -65,6 +71,7 @@
              padding: 1rem;
              text-align: center;
              cursor: pointer; /* Indicate it's clickable */
+             transition: background-color 0.2s ease-in-out;
          }
          .category-card:hover {
              background-color: #444; /* Darken on hover */
@@ -179,8 +186,7 @@
 
 
             itemCol.innerHTML = `
-                <div class="card-barang">
-                    <img src="${itemPlaceholderImgUrl}" class="card-img-top" alt="${item.nama_barang}" onerror="this.onerror=null;this.src='https://placehold.co/300x180/222/white?text=No+Image';">
+                <div class="card-barang" data-id="${item.id_barang}"> <img src="${itemPlaceholderImgUrl}" class="card-img-top" alt="${item.nama_barang}" onerror="this.onerror=null;this.src='https://placehold.co/300x180/222/white?text=No+Image';">
                     <div class="card-body">
                         <h5 class="card-title">${item.nama_barang}</h5>
                         <p class="card-text">${item.deskripsi_barang}</p>
@@ -190,7 +196,22 @@
             `;
             barangRow.appendChild(itemCol);
         });
+
+        // Add click event listeners to the item cards after rendering
+        attachItemCardListeners();
     }
+
+    // Function to attach click listeners to item cards
+    function attachItemCardListeners() {
+        document.querySelectorAll('#barangRow .card-barang').forEach(card => {
+            card.addEventListener('click', () => {
+                const itemId = card.dataset.id; // Get the item ID from the data-id attribute
+                // Redirect to the detail page, passing the item ID as a query parameter
+                window.location.href = `/detailBarang/{itemId}`; // <-- Adjust the detail page URL if needed
+            });
+        });
+    }
+
 
     // Initial load: Fetch data and render
     document.addEventListener('DOMContentLoaded', async () => {
@@ -206,13 +227,17 @@
         const allItems = document.querySelectorAll('#barangRow .col-md-3'); // Get all item columns
 
         allItems.forEach(itemCol => {
-            const itemName = itemCol.querySelector('.card-title').innerText.toLowerCase();
-            const itemDescription = itemCol.querySelector('.card-text').innerText.toLowerCase();
+            // Get the card element within the column
+            const card = itemCol.querySelector('.card-barang');
+            if (card) {
+                const itemName = card.querySelector('.card-title').innerText.toLowerCase();
+                const itemDescription = card.querySelector('.card-text').innerText.toLowerCase();
 
-            if (itemName.includes(searchTerm) || itemDescription.includes(searchTerm)) {
-                itemCol.style.display = 'block'; // Show item
-            } else {
-                itemCol.style.display = 'none'; // Hide item
+                if (itemName.includes(searchTerm) || itemDescription.includes(searchTerm)) {
+                    itemCol.style.display = 'block'; // Show item column
+                } else {
+                    itemCol.style.display = 'none'; // Hide item column
+                }
             }
         });
     });
