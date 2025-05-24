@@ -88,3 +88,4 @@ Route::get('/penitip/nota/{id}', [PenitipController::class, 'generateNota'])->na
 Route::post('/register/owner', [OwnerController::class, 'store'])->name('owner.store');
 Route::post('/register/cs', [CsController::class, 'store'])->name('cs.store');
 Route::post('/register/admin', [AdminController::class, 'store'])->name('admin.store');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);

@@ -12,8 +12,8 @@ use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\PembeliController;
 use App\Http\Controllers\PenitipController;
 use App\Http\Controllers\PenukaranController;
-use App\Http\Controllers\ReqDonasiController; // Import the LoginController
-
+use App\Http\Controllers\ReqDonasiController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
