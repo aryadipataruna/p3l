@@ -115,44 +115,45 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // Function to fetch data from the API
+    // ✅ Fungsi ambil parameter itemId dari URL
+    function getItemIdFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('itemId'); // Mengambil nilai ?itemId=...
+    }
+
+    // ✅ Function untuk fetch data dari API
     async function fetchBarang() {
         try {
-            // Replace with your actual API endpoint URL
-            const response = await fetch('http://127.0.0.1:8000/api/barang'); // <-- Replace with your API URL
+            const response = await fetch('http://127.0.0.1:8000/api/barang');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
-            return data.data; // Assuming your API returns data in a 'data' key
+            return data.data;
         } catch (error) {
             console.error("Error fetching barang data:", error);
             document.getElementById('loadingBarang').innerText = 'Failed to load items.';
             document.getElementById('loadingCategories').innerText = 'Failed to load categories.';
-            return []; // Return empty array on error
+            return [];
         }
     }
 
-    // Function to render categories
+    // ✅ Function untuk render kategori
     function renderCategories(barangData) {
         const categoriesRow = document.getElementById('categoriesRow');
-        categoriesRow.innerHTML = ''; // Clear loading message
+        categoriesRow.innerHTML = '';
 
         if (barangData.length === 0) {
-             categoriesRow.innerHTML = '<div class="col-12 text-center text-white">No categories found.</div>';
-             return;
+            categoriesRow.innerHTML = '<div class="col-12 text-center text-white">No categories found.</div>';
+            return;
         }
 
-        // Extract unique categories
         const uniqueCategories = [...new Set(barangData.map(item => item.kategori))];
 
-        // Render each category
         uniqueCategories.forEach(category => {
             const categoryCol = document.createElement('div');
-            categoryCol.classList.add('col-md-3', 'mb-3'); // Use Bootstrap grid classes
+            categoryCol.classList.add('col-md-3', 'mb-3');
 
-            // Basic placeholder image URL - replace with actual category images if available
-            // Using placehold.co for simple text placeholders
             const placeholderImgUrl = `https://placehold.co/100x100/333/white?text=${encodeURIComponent(category)}`;
 
             categoryCol.innerHTML = `
@@ -165,28 +166,25 @@
         });
     }
 
-    // Function to render barang items
+    // ✅ Function untuk render barang
     function renderBarang(barangData) {
         const barangRow = document.getElementById('barangRow');
-        barangRow.innerHTML = ''; // Clear loading message
+        barangRow.innerHTML = '';
 
         if (barangData.length === 0) {
             barangRow.innerHTML = '<div class="col-12 text-center text-white">No items found.</div>';
             return;
         }
 
-        // Render each barang item
         barangData.forEach(item => {
             const itemCol = document.createElement('div');
-            itemCol.classList.add('col-md-3', 'mb-4'); // Use Bootstrap grid classes
+            itemCol.classList.add('col-md-3', 'mb-4');
 
-            // Basic placeholder image URL - replace with actual item images if available
-            // Using placehold.co for simple text placeholders
-             const itemPlaceholderImgUrl = `https://placehold.co/300x180/222/white?text=${encodeURIComponent(item.nama_barang)}`;
-
+            const itemPlaceholderImgUrl = `https://placehold.co/300x180/222/white?text=${encodeURIComponent(item.nama_barang)}`;
 
             itemCol.innerHTML = `
-                <div class="card-barang" data-id="${item.id_barang}"> <img src="${itemPlaceholderImgUrl}" class="card-img-top" alt="${item.nama_barang}" onerror="this.onerror=null;this.src='https://placehold.co/300x180/222/white?text=No+Image';">
+                <div class="card-barang" data-id="${item.id_barang}">
+                    <img src="${itemPlaceholderImgUrl}" class="card-img-top" alt="${item.nama_barang}" onerror="this.onerror=null;this.src='https://placehold.co/300x180/222/white?text=No+Image';">
                     <div class="card-body">
                         <h5 class="card-title">${item.nama_barang}</h5>
                         <p class="card-text">${item.deskripsi_barang}</p>
@@ -197,51 +195,53 @@
             barangRow.appendChild(itemCol);
         });
 
-        // Add click event listeners to the item cards after rendering
-        attachItemCardListeners();
+        attachItemCardListeners(); // Re-attach after render
     }
 
-    // Function to attach click listeners to item cards
+    // ✅ Tambah event klik pada kartu barang
     function attachItemCardListeners() {
         document.querySelectorAll('#barangRow .card-barang').forEach(card => {
             card.addEventListener('click', () => {
-                const itemId = card.dataset.id; // Get the item ID from the data-id attribute
-                // Redirect to the detail page, passing the item ID as a query parameter
-                window.location.href = `/detailBarang/{itemId}`; // <-- Adjust the detail page URL if needed
+                const itemId = card.dataset.id;
+                window.location.href = `/detailBarang?itemId=${itemId}`;
             });
         });
     }
 
-
-    // Initial load: Fetch data and render
+    // ✅ Saat halaman selesai dimuat
     document.addEventListener('DOMContentLoaded', async () => {
         const barangData = await fetchBarang();
-        renderCategories(barangData);
-        renderBarang(barangData);
+        const itemId = getItemIdFromUrl();
+
+        let filteredBarang = barangData;
+
+        if (itemId) {
+            filteredBarang = barangData.filter(item => item.id_barang == itemId);
+        }
+
+        renderCategories(filteredBarang);
+        renderBarang(filteredBarang);
     });
 
-    // Basic search functionality (client-side filtering)
-    // For a real application, you'd likely implement server-side search
+    // ✅ Fitur pencarian (client-side)
     document.getElementById('searchInput').addEventListener('input', (event) => {
         const searchTerm = event.target.value.toLowerCase();
-        const allItems = document.querySelectorAll('#barangRow .col-md-3'); // Get all item columns
+        const allItems = document.querySelectorAll('#barangRow .col-md-3');
 
         allItems.forEach(itemCol => {
-            // Get the card element within the column
             const card = itemCol.querySelector('.card-barang');
             if (card) {
                 const itemName = card.querySelector('.card-title').innerText.toLowerCase();
                 const itemDescription = card.querySelector('.card-text').innerText.toLowerCase();
 
                 if (itemName.includes(searchTerm) || itemDescription.includes(searchTerm)) {
-                    itemCol.style.display = 'block'; // Show item column
+                    itemCol.style.display = 'block';
                 } else {
-                    itemCol.style.display = 'none'; // Hide item column
+                    itemCol.style.display = 'none';
                 }
             }
         });
     });
-
 </script>
 
 </body>
