@@ -1,93 +1,88 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlamatController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\CustomerServiceController;
 use App\Http\Controllers\DiskusiController;
+use App\Http\Controllers\DonasiController;
+use App\Http\Controllers\HunterController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\KomisiController;
+use App\Http\Controllers\KurirController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MerchandiseController;
 use App\Http\Controllers\OrganisasiController;
+use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\PegawaiGudangController;
 use App\Http\Controllers\PembeliController;
 use App\Http\Controllers\PenitipController;
 use App\Http\Controllers\PenukaranController;
 use App\Http\Controllers\ReqDonasiController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
 use Illuminate\Support\Facades\Route;
 
-// Public Routes
+// =====================
+// ROUTES REGISTER SEMUA ROLE
+// =====================
 
-// Registration routes (handled by individual controllers' store methods)
+Route::post('/owner/register', [OwnerController::class, 'store'])->name('owner.store');
+Route::post('/admin/register', [AdminController::class, 'store'])->name('admin.store');
+Route::post('/pegawaigudang/register', [PegawaiGudangController::class, 'store'])->name('pegawaigudang.store');
+Route::post('/cs/register', [CustomerServiceController::class, 'store'])->name('cs.store');
+Route::post('/kurir/register', [KurirController::class, 'store'])->name('kurir.store');
+Route::post('/hunter/register', [HunterController::class, 'store'])->name('hunter.store');
+
+// ROUTES REGISTER YANG SUDAH ADA
 Route::post('/pembeli/register', [PembeliController::class, 'store'])->name('pembeli.store');
 Route::post('/penitip/register', [PenitipController::class, 'store'])->name('penitip.store');
 Route::post('/pegawai/register', [PegawaiController::class, 'store'])->name('pegawai.store');
 Route::post('/organisasi/register', [OrganisasiController::class, 'store'])->name('organisasi.store');
 
-// Unified Login route (handled by LoginController)
-// This replaces the individual login routes below
+// ROUTES LOGIN UNIFIED
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 
-// Individual Login routes (REMOVED as they are now handled by the unified /login)
-Route::post('/pembeli/login', [PembeliController::class, 'login'])->name('pembeli.login');
-//Route::post('/penitip/login', [PenitipController::class, 'login'])->name('penitip.login');
-//Route::post('/pegawai/login', [PegawaiController::class, 'login'])->name('pegawai.login');
-// Route::post('/organisasi/login', [OrganisasiController::class, 'login'])->name('organisasi.login');
+// =====================
+// ROUTES AUTHENTICATED (LOGIN DULU PAKAI TOKEN SANCTUM)
+// =====================
 
-// General Authenticated Routes (for any authenticated user type)
 Route::middleware('auth:sanctum')->group(function () {
-    // Get authenticated user info (handled by LoginController)
+    // Info user authenticated & logout
     Route::get('/user', [LoginController::class, 'getUser'])->name('user.authenticated');
-    // Logout route (handled by LoginController)
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-    // You can add other routes here that are accessible to ANY authenticated user
+    // Pegawai
+    Route::get('/pegawai/authenticated', [PegawaiController::class, 'index'])->name('pegawai.index.authenticated');
+    Route::get('/pegawai/authenticated/{id}', [PegawaiController::class, 'show'])->name('pegawai.show.authenticated');
+    Route::post('/pegawai/create/authenticated', [PegawaiController::class, 'store'])->name('pegawai.create.authenticated');
+    Route::put('/pegawai/update/authenticated/{id}', [PegawaiController::class, 'update'])->name('pegawai.update.authenticated');
+    Route::delete('/pegawai/delete/authenticated/{id}', [PegawaiController::class, 'destroy'])->name('pegawai.delete.authenticated');
+
+    // Pembeli
+    Route::get('/pembeli/authenticated', [PembeliController::class, 'index'])->name('pembeli.index.authenticated');
+    Route::get('/pembeli/authenticated/{id}', [PembeliController::class, 'show'])->name('pembeli.show.authenticated');
+    Route::post('/pembeli/create/authenticated', [PembeliController::class, 'store'])->name('pembeli.create.authenticated');
+    Route::put('/pembeli/update/authenticated/{id}', [PembeliController::class, 'update'])->name('pembeli.update.authenticated');
+    Route::delete('/pembeli/delete/authenticated/{id}', [PembeliController::class, 'destroy'])->name('pembeli.delete.authenticated');
+
+    // Penitip
+    Route::get('/penitip/authenticated', [PenitipController::class, 'index'])->name('penitip.index.authenticated');
+    Route::get('/penitip/authenticated/{id}', [PenitipController::class, 'show'])->name('penitip.show.authenticated');
+    Route::post('/penitip/create/authenticated', [PenitipController::class, 'store'])->name('penitip.create.authenticated');
+    Route::put('/penitip/update/authenticated/{id}', [PenitipController::class, 'update'])->name('penitip.update.authenticated');
+    Route::delete('/penitip/delete/authenticated/{id}', [PenitipController::class, 'destroy'])->name('penitip.delete.authenticated');
+
+    // Organisasi
+    Route::get('/organisasi/authenticated', [OrganisasiController::class, 'index'])->name('organisasi.index.authenticated');
+    Route::get('/organisasi/authenticated/{id}', [OrganisasiController::class, 'show'])->name('organisasi.show.authenticated');
+    Route::post('/organisasi/create/authenticated', [OrganisasiController::class, 'store'])->name('organisasi.create.authenticated');
+    Route::put('/organisasi/update/authenticated/{id}', [OrganisasiController::class, 'update'])->name('organisasi.update.authenticated');
+    Route::delete('/organisasi/delete/authenticated/{id}', [OrganisasiController::class, 'destroy'])->name('organisasi.delete.authenticated');
 });
 
-// Authenticated Routes Grouped by User Type (Requires a token from the specific user type)
-
-// Authenticated Routes for Pegawai
-Route::middleware('auth:sanctum')->group(function () {
-
-    Route::get('/pegawai/authenticated', [PegawaiController::class, 'index'])->name('pegawai.index.authenticated');                   // Renamed for clarity
-    Route::get('/pegawai/authenticated/{id}', [PegawaiController::class, 'show'])->name('pegawai.show.authenticated');                // Renamed for clarity
-    Route::post('/pegawai/create/authenticated', [PegawaiController::class, 'store'])->name('pegawai.create.authenticated');          // Renamed
-    Route::put('/pegawai/update/authenticated/{id}', [PegawaiController::class, 'update'])->name('pegawai.update.authenticated');     // Renamed
-    Route::delete('/pegawai/delete/authenticated/{id}', [PegawaiController::class, 'destroy'])->name('pegawai.delete.authenticated'); // Renamed
-
-});
-
-// Authenticated Routes for Pembeli
-Route::middleware('auth:sanctum')->group(function () {
-
-    Route::get('/pembeli/authenticated', [PembeliController::class, 'index'])->name('pembeli.index.authenticated');                   // Renamed for clarity
-    Route::get('/pembeli/authenticated/{id}', [PembeliController::class, 'show'])->name('pembeli.show.authenticated');                // Renamed for clarity
-    Route::post('/pembeli/create/authenticated', [PembeliController::class, 'store'])->name('pembeli.create.authenticated');          // Renamed
-    Route::put('/pembeli/update/authenticated/{id}', [PembeliController::class, 'update'])->name('pembeli.update.authenticated');     // Renamed
-    Route::delete('/pembeli/delete/authenticated/{id}', [PembeliController::class, 'destroy'])->name('pembeli.delete.authenticated'); // Renamed
-
-});
-
-// Authenticated Routes for Penitip
-Route::middleware('auth:sanctum')->group(function () {
-
-    Route::get('/penitip/authenticated', [PenitipController::class, 'index'])->name('penitip.index.authenticated');                   // Renamed for clarity
-    Route::get('/penitip/authenticated/{id}', [PenitipController::class, 'show'])->name('penitip.show.authenticated');                // Renamed for clarity
-    Route::post('/penitip/create/authenticated', [PenitipController::class, 'store'])->name('penitip.create.authenticated');          // Renamed
-    Route::put('/penitip/update/authenticated/{id}', [PenitipController::class, 'update'])->name('penitip.update.authenticated');     // Renamed
-    Route::delete('/penitip/delete/authenticated/{id}', [PenitipController::class, 'destroy'])->name('penitip.delete.authenticated'); // Renamed
-
-});
-
-// Authenticated Routes for Organisasi
-Route::middleware('auth:sanctum')->group(function () {
-
-    Route::get('/organisasi/authenticated', [OrganisasiController::class, 'index'])->name('organisasi.index.authenticated');                   // Renamed for clarity
-    Route::get('/organisasi/authenticated/{id}', [OrganisasiController::class, 'show'])->name('organisasi.show.authenticated');                // Renamed for clarity
-    Route::post('/organisasi/create/authenticated', [OrganisasiController::class, 'store'])->name('organisasi.create.authenticated');          // Renamed
-    Route::put('/organisasi/update/authenticated/{id}', [OrganisasiController::class, 'update'])->name('organisasi.update.authenticated');     // Renamed
-    Route::delete('/organisasi/delete/authenticated/{id}', [OrganisasiController::class, 'destroy'])->name('organisasi.delete.authenticated'); //
-});
+// =====================
+// ROUTES PUBLIC (CRUD LAINNYA)
+// =====================
 
 Route::get('/alamat', [AlamatController::class, 'index'])->name('alamat.index');
 Route::get('/alamat/{id}', [AlamatController::class, 'show'])->name('alamat.show');
@@ -142,18 +137,3 @@ Route::get('/reqDonasi/{id}', [ReqDonasiController::class, 'show'])->name('reqDo
 Route::post('/reqDonasi/create', [ReqDonasiController::class, 'store'])->name('reqDonasi.store');
 Route::put('/reqDonasi/update/{id}', [ReqDonasiController::class, 'update'])->name('reqDonasi.update');
 Route::delete('/reqDonasi/delete/{id}', [ReqDonasiController::class, 'destroy'])->name('reqDonasi.destroy');
-
-// Get authenticated Penitip profile, saldo, and reward
-Route::get('/penitip/profile', [PenitipController::class, 'profile'])->name('penitip.profile.index');
-Route::get('/penitip/{id}', [PenitipController::class, '']);
-Route::middleware(['auth:sanctum', 'role:penitip'])->group(function () {
-    Route::get('/penitip/profile', [PenitipController::class, 'profile'])->name('penitip.profile');
-});
-
-// Password Reset Routes...
-Route::get('password/reset', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('password/email', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-Route::get('password/reset/{token}', [App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::post('password/reset', [App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update');
-
-Route::get('/profile', [PenitipController::class, 'profilePenitip'])->middleware('auth:sanctum')->name('penitip.profile');

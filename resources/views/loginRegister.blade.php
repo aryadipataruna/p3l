@@ -4,731 +4,389 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPvNnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-    <title>Login & Sign Up</title>
+    <title>Login & Register - ReUseMart</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
     <style>
-        /* ... (Your existing CSS) ... */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        body {
+            background: #181818;
             font-family: 'Poppins', sans-serif;
         }
-        body {
+        .container-auth {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background: #f0f0f0; /* Light gray background */
-        }
-        .container {
-            position: relative;
-            width: 80vw; /* Adjusted width */
-            height: 80vh; /* Adjusted height */
-            background: #fff;
-            box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            width: 900px;
+            margin: 40px auto;
+            border-radius: 16px;
             overflow: hidden;
-            border-radius: 10px; /* Added rounded corners */
+            box-shadow: 0 0 20px 0 #0006;
         }
-        .container::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -50%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(-45deg, #3498db, #2ecc71); /* Updated gradient colors */
-            z-index: 6;
-            transform: translateX(100%);
-            transition: 1s ease-in-out;
-        }
-        .signin-signup {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            z-index: 5;
-        }
-        form {
+        .auth-left, .auth-right {
+            width: 50%;
+            min-height: 600px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            width: 45%; /* Adjusted width */
-            min-width: 280px; /* Adjusted min-width */
-            padding: 0 20px; /* Adjusted padding */
+            background: #222;
         }
-        form.sign-in-form {
-            opacity: 1;
-            transition: 0.5s ease-in-out;
-            transition-delay: 1s;
+        .auth-left {
+            background: linear-gradient(135deg,#7B7B7B,#222);
+            color: #fff;
         }
-        form.sign-up-form {
-            opacity: 0;
-            transition: 0.5s ease-in-out;
-            transition-delay: 1s;
+        .auth-right {
+            background: #111;
+            color: #CAAD7B;
+            position: relative;
         }
-        .title {
-            font-size: 2.2em; /* Adjusted font size */
-            color: #333; /* Darker text color */
-            margin-bottom: 20px; /* Increased margin */
+        .auth-title {
+            font-size: 2.5rem;
+            margin-bottom: 32px;
+            color: #CAAD7B;
+            font-weight: bold;
         }
-        .input-field {
-            width: 100%;
-            height: 45px; /* Adjusted height */
-            background: #f0f0f0;
-            margin: 10px 0;
+        .btn-auth {
+            background: #CAAD7B;
+            color: #111;
+            font-size: 1.1rem;
+            font-weight: bold;
             border: none;
-            border-radius: 5px; /* Adjusted border radius */
+            border-radius: 12px;
+            padding: 12px 48px;
+            margin-top: 24px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-auth:hover {
+            background: #b3935c;
+        }
+        .form-auth {
+            width: 80%;
+            max-width: 340px;
+            display: flex;
+            flex-direction: column;
+        }
+        .input-group-auth {
             display: flex;
             align-items: center;
-            padding: 0 15px; /* Added padding */
+            margin-bottom: 22px;
+            border: 1.5px solid #CAAD7B;
+            background: #181818;
+            border-radius: 8px;
+            overflow: hidden;
         }
-        .input-field i {
-            flex: 1;
-            text-align: center;
-            color: #555;
-            font-size: 1.1em; /* Adjusted font size */
+        .input-group-auth img {
+            width: 32px;
+            height: 32px;
+            margin: 0 16px;
         }
-        .input-field input,
-        .input-field select { /* Apply styles to select too */
-            flex: 5;
-            background: none;
+        .input-group-auth select,
+        .input-group-auth input {
+            background: transparent;
             border: none;
             outline: none;
-            width: 100%;
-            font-size: 1em; /* Adjusted font size */
-            font-weight: 500;
-            color: #333;
-            padding: 0; /* Remove default select padding */
-            -webkit-appearance: none; /* Remove default arrow */
-            -moz-appearance: none;
-            appearance: none;
-            cursor: pointer;
-        }
-        .input-field select option {
-            color: #333; /* Ensure option text is visible */
-            background: #f0f0f0;
-        }
-
-        /* Custom arrow for select */
-        .input-field i.select-arrow {
-            flex: none; /* Don't let the arrow take up flex space */
-            width: 30px; /* Adjust width as needed */
-            pointer-events: none; /* Allow clicks to pass through to select */
-            text-align: center;
-        }
-
-        .btn {
-            width: 120px; /* Adjusted width */
-            height: 40px; /* Adjusted height */
-            border: none;
-            border-radius: 5px; /* Adjusted border radius */
-            background: #3498db; /* Primary button color */
             color: #fff;
-            font-weight: 600;
-            margin: 15px 0; /* Adjusted margin */
-            text-transform: uppercase;
+            font-size: 1rem;
+            flex: 1;
+            padding: 12px 8px;
+        }
+        .input-group-auth select option {
+            color: #111;
+        }
+        .form-link {
+            color: #CAAD7B;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Added subtle shadow */
-            transition: background-color 0.3s ease;
-        }
-        .btn:hover {
-            background: #2980b9; /* Darker shade on hover */
-        }
-        a {
-            text-decoration: none;
-            color: #555;
-            font-size: 0.9em;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .panels-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-        }
-        .panel {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-around;
-            width: 35%;
-            min-width: 250px; /* Adjusted min-width */
-            padding: 0 20px; /* Adjusted padding */
-            text-align: center;
-            z-index: 6;
-        }
-        .left-panel {
-            pointer-events: none;
-        }
-        .content {
-            color: #fff;
-            transition: 1.1s ease-in-out;
-            transition-delay: 0.5s;
-        }
-        .panel h3 {
-            font-size: 1.8em; /* Adjusted font size */
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        .panel p {
-            font-size: 0.95em; /* Adjusted font size */
-            padding: 10px 0;
-            line-height: 1.6; /* Improved readability */
-        }
-        .image {
-            width: 100%;
-            max-width: 200px; /* Adjusted max width */
-            transition: 1.1s ease-in-out;
-            transition-delay: 0.4s;
-        }
-        .left-panel .image,
-        .left-panel .content {
-            transform: translateX(-200%);
-        }
-        .right-panel .image,
-        .right-panel .content {
-            transform: translateX(0);
-        }
-        .account-text {
-            display: none;
-        }
-        /* Animation */
-        .container.sign-up-mode::before {
-            transform: translateX(0);
-        }
-        .container.sign-up-mode .right-panel .image,
-        .container.sign-up-mode .right-panel .content {
-            transform: translateX(200%);
-        }
-        .container.sign-up-mode .left-panel .image,
-        .container.sign-up-mode .left-panel .content {
-            transform: translateX(0);
-        }
-        .container.sign-up-mode form.sign-in-form {
-            opacity: 0;
-        }
-        .container.sign-up-mode form.sign-up-form {
-            opacity: 1;
-        }
-        .container.sign-up-mode .right-panel {
-            pointer-events: none;
-        }
-        .container.sign-up-mode .left-panel {
-            pointer-events: all;
-        }
-        /* Responsive */
-        @media (max-width: 870px) {
-            .container {
-                width: 100vw;
-                height: 100vh;
-            }
-            .signin-signup {
-                flex-direction: column;
-            }
-            form {
-                width: 80%;
-            }
-            .panels-container {
-                display: none;
-            }
-            .account-text {
-                display: initial;
-                margin-top: 30px;
-                text-align: center;
-            }
-        }
-        @media (max-width: 480px) {
-            form {
-                width: 90%;
-            }
-            .input-field {
-                height: 40px;
-                margin: 8px 0;
-            }
-            .btn {
-                height: 35px;
-                font-size: 0.9em;
-                margin: 10px 0;
-            }
-            .title {
-                font-size: 2em;
-                margin-bottom: 15px;
-            }
-            .account-text {
-                font-size: 0.85em;
-            }
-        }
-
-        /* Change Password Styling */
-        .change-password-link {
-            display: block;
             margin-top: 10px;
+            text-align: right;
+            font-size: 0.98rem;
+        }
+        .form-link:hover { text-decoration: underline; }
+        .error-msg, .success-msg {
+            color: #e06666;
+            background: #fff3;
+            border-radius: 7px;
+            padding: 6px 10px;
+            margin-bottom: 12px;
+            font-size: 0.98rem;
             text-align: center;
         }
-        .change-password-modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 7; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        .success-msg { color: #3ac569; background: #353; }
+        .hidden { display: none !important; }
+        @media (max-width:900px) {
+            .container-auth { flex-direction: column; width: 98vw;}
+            .auth-left, .auth-right { width: 100%; min-height: 340px;}
+            .auth-right { padding-bottom: 40px;}
         }
-        .change-password-modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%; /* Could be more or less, depending on screen size */
-            max-width: 400px; /* Limit max width */
-            border-radius: 5px;
-            position: relative;
-        }
-        .close-button {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close-button:hover,
-        .close-button:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .change-password-form {
-            display: flex;
-            flex-direction: column;
-        }
-        .change-password-form .input-field {
-            margin-bottom: 15px;
-        }
-        .change-password-form .btn {
-            margin-top: 20px;
-            align-self: center; /* Center the button */
-        }
-         .change-password-modal-content h2 {
-            text-align: center;
-            margin-bottom: 20px;
-         }
-
-         /* Success Message Styling */
-         .signup-success-message {
-             position: fixed;
-             top: 50%;
-             left: 50%;
-             transform: translate(-50%, -50%);
-             background-color: #4CAF50; /* Green background */
-             color: white;
-             padding: 20px;
-             border-radius: 5px;
-             z-index: 8; /* Higher than the modal */
-             text-align: center;
-             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-             display: none; /* Hidden by default */
-         }
-         .signup-success-message p {
-             margin-bottom: 10px;
-         }
-         .signup-success-message .btn-ok {
-             background-color: #388E3C;
-             color: white;
-             border: none;
-             padding: 10px 20px;
-             text-align: center;
-             text-decoration: none;
-             display: inline-block;
-             font-size: 16px;
-             border-radius: 3px;
-             cursor: pointer;
-             transition: background-color 0.3s ease;
-         }
-         .signup-success-message .btn-ok:hover {
-             background-color: #1E7E34;
-         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="signin-signup">
-            {{-- Login Form --}}
-            <form action="{{ route('login') }}" method="POST" class="sign-in-form">
+    <div class="container-auth">
+        <!-- Kiri: Welcome/Login/Register Panel -->
+        <div class="auth-left" id="panel-welcome">
+            <h2 class="auth-title" id="welcome-title">Welcome Back!</h2>
+            <button class="btn-auth" onclick="showRegister()">SIGN UP</button>
+            <div style="margin-top:12px; color:#CAAD7B; font-size:0.95rem;">User</div>
+        </div>
+        <!-- Kanan: Login/Register/Forgot Form -->
+        <div class="auth-right" id="panel-form">
+            <!-- LOGIN FORM -->
+            <form method="POST" action="{{ route('login') }}" class="form-auth" id="form-login">
                 @csrf
-                <h2 class="title">Sign in</h2>
-                <div class="input-field">
-                    <i class="fas fa-user"></i>
-                    {{-- Placeholder updated to suggest ID or Email --}}
-                    <input type="text" name="login_identifier" placeholder="ID / Email" required>
+                <div class="auth-title" style="text-align:center;">Login</div>
+                <div id="errorLogin" class="error-msg hidden"></div>
+                <div class="input-group-auth">
+                    <img src="{{ asset('images/Email.png') }}" alt="Email">
+                    <input type="email" name="email" placeholder="Masukkan email Anda" required>
                 </div>
-                <div class="input-field">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" name="password" placeholder="Password" required>
+                <div class="input-group-auth">
+                    <img src="{{ asset('images/Password.png') }}" alt="Password">
+                    <input type="password" name="password" placeholder="Masukkan kata sandi Anda" required>
                 </div>
-                <input type="submit" value="Login" class="btn">
-                <a href="#" class="change-password-link" id="open-change-password">Forgot Password?</a>
-                <p class="account-text">Don't have an account? <a href="#" id="sign-up-btn2">Sign up</a></p>
+                <div class="form-link" onclick="showForgot()">Lupa Password?</div>
+                <button type="submit" class="btn-auth">LOGIN</button>
             </form>
-
-            {{-- Sign Up Form --}}
-            {{-- The form action and input names will be set dynamically by JavaScript based on the selected role --}}
-            <form action="" method="POST" class="sign-up-form" id="signupForm">
-                 @csrf
-                 <h2 class="title">Sign up</h2>
-
-                 <div class="input-field">
-                     <i class="fas fa-user"></i>
-                     <input type="text" name="generic_name" placeholder="Nama Lengkap" required data-generic-name="name">
-                 </div>
-
-                 <div class="input-field">
-                     <i class="fas fa-envelope"></i>
-                     <input type="email" name="generic_email" placeholder="Email" required data-generic-name="email">
-                 </div>
-
-                 {{-- Role Selection Dropdown for Sign Up --}}
-                 <div class="input-field">
-                     <i class="fas fa-user-tag"></i>
-                     <select name="role" id="signup-role-select" required>
-                         <option value="" disabled selected>Pilih Role</option>
-                         <option value="pembeli">Pembeli</option>
-                         <option value="organisasi">Organisasi</option>
-                         <option value="owner">Owner</option>
-                         <option value="penitip">Penitip</option>
-                         <option value="cs">Cs</option>
-                         <option value="admin">Admin</option>
-                         <option value="pegawaiGudang">Pegawai Gudang</option>
-                         {{-- Pegawai and Penitip roles typically not available for public sign-up --}}
-                         {{-- <option value="pegawaiGudang">Pegawai Gudang</option> --}}
-                         {{-- <option value="penitip">Penitip</option> --}}
-                         {{-- <option value="owner">Owner</option> --}}
-                         {{-- <option value="pembeli">Pembeli</option> --}}
-                         {{-- <option value="cs">CS</option> --}}
-                         {{-- <option value="organisasi">Organisasi</option> --}}
-                         {{-- <option value="admin">Admin
-			 </option> --}}
-                     </select>
-                     <i class="fas fa-chevron-down select-arrow"></i> {{-- Custom arrow --}}
-                 </div>
-
-                 <div class="input-field">
-                     <i class="fas fa-phone"></i>
-                     <input type="text" name="generic_phone" placeholder="Nomor Telepon" required data-generic-name="phone">
-                 </div>
-
-                 <div class="input-field">
-                     <i class="fas fa-map-marker-alt"></i>
-                     <input type="text" name="generic_address" placeholder="Alamat" required data-generic-name="address">
-                 </div>
-
-                 <div class="input-field">
-                     <i class="fas fa-lock"></i>
-                     <input type="password" name="generic_password" placeholder="Password" required data-generic-name="password">
-                 </div>
-
-                 {{-- Add hidden inputs for default values for nullable fields --}}
-                 {{-- These will be updated by JavaScript based on the role --}}
-                 <input type="hidden" name="generic_poin" value="0" data-generic-name="poin">
-                 <input type="hidden" name="generic_saldo" value="0" data-generic-name="saldo">
-
-
-                 <button type="submit" class="btn" id="signupSubmitBtn">Sign Up</button>
-                 <p class="account-text">Already have an account? <a href="#" id="sign-in-btn2">Sign in</a></p>
-            </form>
-        </div>
-
-        <div class="panels-container">
-            <div class="panel left-panel">
-                <div class="content">
-                    <h3>Sudah punya akun?</h3>
-                    <p>Masuk untuk melanjutkan pengalaman berbelanja Anda!</p>
-                    <button class="btn transparent" id="sign-in-btn">Sign in</button>
-                </div>
-                <img src="signin.svg" alt="Sign In Illustration" class="image">
-            </div>
-            <div class="panel right-panel">
-                <div class="content">
-                    <h3>Belum punya akun?</h3>
-                    <p>Daftar sekarang dan temukan barang-barang unik di ReUse Mart!</p>
-                    <button class="btn transparent" id="sign-up-btn">Sign up</button>
-                </div>
-                <img src="signup.svg" alt="Sign Up Illustration" class="image">
-            </div>
-        </div>
-    </div>
-
-    {{-- Change Password Modal --}}
-    <div id="change-password-modal" class="change-password-modal">
-        <div class="change-password-modal-content">
-            <span class="close-button" id="close-change-password">&times;</span>
-            <h2 class="title">Reset Password</h2>
-            <p style="text-align: center; margin-bottom: 15px;">Enter your email address to receive a password reset link.</p>
-            {{-- This form still uses the standard Laravel password reset route, which assumes email --}}
-            <form class="change-password-form" action="{{ route('password.email') }}" method="POST">
+            <!-- REGISTER FORM -->
+            <form method="POST" action="" class="form-auth hidden" id="form-register">
                 @csrf
-                <div class="input-field">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" name="email" placeholder="Your Email" required>
+                <div class="auth-title" style="text-align:center;">Create Account</div>
+                <div id="errorRegister" class="error-msg hidden"></div>
+                <div class="input-group-auth">
+                    <img src="{{ asset('images/User.png') }}" alt="Nama">
+                    <input type="text" name="generic_name" placeholder="Nama Lengkap" required data-generic-name="name">
                 </div>
-                <button type="submit" class="btn">Send Reset Link</button>
+                <div class="input-group-auth">
+                    <img src="{{ asset('images/Email.png') }}" alt="Email">
+                    <input type="email" name="generic_email" placeholder="Email" required data-generic-name="email">
+                </div>
+                <div class="input-group-auth">
+                    <img src="{{ asset('images/Cart.png') }}" alt="Role">
+                    <select name="role" id="role-select" required>
+                        <option value="" disabled selected>Pilih Role</option>
+                        <option value="owner">Owner</option>
+                        <option value="admin">Admin</option>
+                        <option value="pegawaigudang">Pegawai Gudang</option>
+                        <option value="pembeli">Pembeli</option>
+                        <option value="penitip">Penitip</option>
+                        <option value="cs">CS</option>
+                        <option value="organisasi">Organisasi</option>
+                        <option value="hunter">Hunter</option>
+                        <option value="kurir">Kurir</option>
+                    </select>
+                </div>
+                <div class="input-group-auth">
+                    <img src="{{ asset('images/User.png') }}" alt="NoTelepon">
+                    <input type="text" name="generic_phone" placeholder="Nomor Telepon" required data-generic-name="phone">
+                </div>
+                <div class="input-group-auth">
+                    <img src="{{ asset('images/HomeBtn.png') }}" alt="Alamat">
+                    <input type="text" name="generic_address" placeholder="Alamat" required data-generic-name="address">
+                </div>
+                <div class="input-group-auth">
+                    <img src="{{ asset('images/Password.png') }}" alt="Password">
+                    <input type="password" name="generic_password" placeholder="Password" required data-generic-name="password">
+                </div>
+                <div class="input-group-auth">
+                    <img src="{{ asset('images/Password.png') }}" alt="Confirm">
+                    <input type="password" name="password_confirmation" placeholder="Konfirmasi Password" required>
+                </div>
+                <input type="hidden" name="generic_poin" value="0" data-generic-name="poin">
+                <input type="hidden" name="generic_saldo" value="0" data-generic-name="saldo">
+                <button type="submit" class="btn-auth">SIGN UP</button>
+                <div class="form-link" onclick="showLogin()">Sudah punya akun? Login</div>
+            </form>
+            <!-- FORGOT PASSWORD FORM -->
+            <form method="POST" action="" class="form-auth hidden" id="form-forgot">
+                @csrf
+                <div class="auth-title" style="text-align:center;">Reset Password</div>
+                <div id="forgot-options" style="margin-bottom:16px;">
+                    <select id="forgot-role" style="width:100%;padding:8px;border-radius:6px;border:1.5px solid #CAAD7B;">
+                        <option value="" disabled selected>Pilih Role</option>
+                        <option value="owner">Owner</option>
+                        <option value="admin">Admin</option>
+                        <option value="pegawaigudang">Pegawai Gudang</option>
+                        <option value="cs">CS</option>
+                        <option value="pembeli">Pembeli</option>
+                        <option value="penitip">Penitip</option>
+                        <option value="organisasi">Organisasi</option>
+                    </select>
+                </div>
+                <div id="forgot-form-content"></div>
+                <div class="form-link" onclick="showLogin()">Kembali ke login</div>
             </form>
         </div>
     </div>
-
-    {{-- Success Message After Sign Up --}}
-    <div id="signup-success-message" class="signup-success-message">
-        <p id="signup-success-text"></p>
-        <button class="btn-ok" id="ok-btn">OK</button>
-    </div>
-
     <script>
-        // Get references to DOM elements
-        const sign_in_btn = document.querySelector("#sign-in-btn");
-        const sign_up_btn = document.querySelector("#sign-up-btn");
-        const container = document.querySelector(".container");
-        const sign_in_btn2 = document.querySelector("#sign-in-btn2");
-        const sign_up_btn2 = document.querySelector("#sign-up-btn2");
-        const signupForm = document.querySelector("#signupForm");
-        const signupSubmitBtn = document.querySelector("#signupSubmitBtn");
-        const signupSuccessMessage = document.getElementById("signup-success-message");
-        const signupSuccessText = document.getElementById("signup-success-text");
-        const okBtn = document.getElementById("ok-btn");
-
-        // Get references for Sign Up form
-        const signupRoleSelect = document.querySelector("#signup-role-select");
-        const signUpInputs = signupForm.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="hidden"]');
-
-        // Get references for Change Password Modal
-        const changePasswordModal = document.getElementById("change-password-modal");
-        const openChangePasswordBtn = document.getElementById("open-change-password");
-        const closeChangePasswordBtn = document.getElementById("close-change-password");
-
-        // --- Sign Up Form Logic ---
-        function updateSignUpForm() {
-            const selectedRole = signupRoleSelect.value;
-            let registrationRoute = '';
-            let nameMapping = {};
-
-            switch (selectedRole) {
-                case 'pembeli':
-                    registrationRoute = '{{ route("pembeli.store") }}';
-                    nameMapping = {
-                        'name': 'NAMA_PEMBELI',
-                        'email': 'EMAIL_PEMBELI',
-                        'password': 'PASSWORD_PEMBELI',
-                        'phone': 'NO_PEMBELI',
-                        'address': 'ALAMAT_PEMBELI',
-                        'poin': 'POIN_PEMBELI',
-                        'saldo': 'SALDO_PEMBELI'
-                    };
-                    break;
-                case 'organisasi':
-                    registrationRoute = '{{ route("organisasi.store") }}';
-                    nameMapping = {
-                        'name': 'NAMA_ORGANISASI',
-                        'email': 'EMAIL_ORGANISASI',
-                        'phone': 'NOTELP_ORGANISASI',
-                        'address': 'ALAMAT_ORGANISASI',
-                        'password': 'PASSWORD_ORGANISASI',
-                        'poin': 'POIN_ORGANISASI',
-                        'saldo': 'SALDO_ORGANISASI'
-                    };
-                    break;
-                case 'owner':
-                    registrationRoute = '{{ route("owner.store") }}';
-                    nameMapping = {
-                        'name': 'NAMA_OWNER',
-                        'email': 'EMAIL_OWNER',
-                        'password': 'PASSWORD_OWNER',
-                        'phone': 'NOTELP_OWNER',
-                        'address': 'ALAMAT_OWNER',
-                        'poin': null,
-                        'saldo': null
-                    };
-                    break;
-                case 'penitip':
-                    registrationRoute = '{{ route("penitip.store") }}';
-                    nameMapping = {
-                        'name': 'NAMA_PENITIP',
-                        'email': null, // Penitip might not have email
-                        'password': 'PASSWORD_PENITIP',
-                        'phone': 'NOTELP_PENITIP',
-                        'address': 'ALAMAT_PENITIP',
-                        'poin': null,
-                        'saldo': null
-                    };
-                    break;
-                case 'cs':
-                    registrationRoute = '{{ route("cs.store") }}';
-                    nameMapping = {
-                        'name': 'NAMA_CS',
-                        'email': 'EMAIL_CS',
-                        'password': 'PASSWORD_CS',
-                        'phone': 'NOTELP_CS',
-                        'address': 'ALAMAT_CS',
-                        'poin': null,
-                        'saldo': null
-                    };
-                    break;
-                case 'admin':
-                    registrationRoute = '{{ route("admin.store") }}';
-                    nameMapping = {
-                        'name': 'NAMA_ADMIN',
-                        'email': 'EMAIL_ADMIN',
-                        'password': 'PASSWORD_ADMIN',
-                        'phone': 'NOTELP_ADMIN',
-                        'address': 'ALAMAT_ADMIN',
-                        'poin': null,
-                        'saldo': null
-                    };
-                    break;
-                case 'pegawaiGudang':
-                    registrationRoute = '{{ route("pegawai.store") }}';
-                    nameMapping = {
-                        'name': 'NAMA_PEGAWAI',
-                        'email': 'EMAIL_PEGAWAI',
-                        'password': 'PASSWORD_PEGAWAI',
-                        'phone': 'NOTELP_PEGAWAI',
-                        'address': 'ALAMAT_PEGAWAI',
-                        'poin': null,
-                        'saldo': null
-                    };
-                    break;
-                default:
-                    registrationRoute = '';
-                    nameMapping = {};
-            }
-
-            signupForm.action = registrationRoute;
-
-            signUpInputs.forEach(input => {
-                const genericName = input.getAttribute('data-generic-name');
-                if (genericName && nameMapping[genericName]) {
-                    input.name = nameMapping[genericName];
-                } else {
-                    input.name = genericName ? 'generic_' + genericName : '';
-                }
-
-                if (input.type === 'hidden') {
-                    const specificName = input.name;
-                    if (specificName && (specificName.toUpperCase().includes('POIN_') || specificName.toUpperCase().includes('SALDO_'))) {
-                        input.value = '0';
-                    }
-                }
-
-                // Disable/enable and clear/require email based on role
-                if (genericName === 'email') {
-                    if (nameMapping['email'] === null) {
-                        input.disabled = true;
-                        input.value = '';
-                        input.required = false;
-                    } else {
-                        input.disabled = false;
-                        input.required = true;
-                    }
-                }
-            });
+        // ----------------- Show/Hide Panels & Forms
+        function showLogin() {
+            document.getElementById('form-login').classList.remove('hidden');
+            document.getElementById('form-register').classList.add('hidden');
+            document.getElementById('form-forgot').classList.add('hidden');
+            document.getElementById('panel-welcome').style.display = '';
         }
+        function showRegister() {
+            document.getElementById('form-login').classList.add('hidden');
+            document.getElementById('form-register').classList.remove('hidden');
+            document.getElementById('form-forgot').classList.add('hidden');
+            document.getElementById('panel-welcome').style.display = 'none';
+        }
+        function showForgot() {
+            document.getElementById('form-login').classList.add('hidden');
+            document.getElementById('form-register').classList.add('hidden');
+            document.getElementById('form-forgot').classList.remove('hidden');
+            document.getElementById('panel-welcome').style.display = 'none';
+        }
+        showLogin();
 
-        // Add event listener to the Sign Up role select
-        signupRoleSelect.addEventListener("change", updateSignUpForm);
-        updateSignUpForm(); // Initial call
+        // --------- Lupa Password Option Dynamic (Email atau Tanggal Lahir)
+        document.getElementById('forgot-role').addEventListener('change', function() {
+            let role = this.value;
+            let div = document.getElementById('forgot-form-content');
+            div.innerHTML = '';
+            if(['pembeli','penitip','organisasi'].includes(role)) {
+                // Email Link
+                div.innerHTML = `
+                <div class="input-group-auth" style="margin-bottom:16px;">
+                    <img src="{{ asset('images/Email.png') }}" alt="Email">
+                    <input type="email" id="forgot-email" placeholder="Masukkan email Anda" required>
+                </div>
+                <button type="button" class="btn-auth" onclick="submitForgotEmail('${role}')">Continue</button>
+                `;
+            } else if(['owner','admin','pegawaigudang','cs'].includes(role)) {
+                // Datepicker
+                div.innerHTML = `
+                <div class="input-group-auth" style="margin-bottom:16px;">
+                    <img src="{{ asset('images/User.png') }}" alt="TanggalLahir">
+                    <input type="date" id="forgot-date" placeholder="Pilih tanggal lahir" required>
+                </div>
+                <button type="button" class="btn-auth" onclick="submitForgotDate('${role}')">Continue</button>
+                `;
+            }
+        });
 
-        // --- Handle Sign Up Form Submission ---
-        signupForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
-
-            const formData = new FormData(this);
-            const selectedRole = signupRoleSelect.value;
-
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Ensure CSRF token is sent
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    signupSuccessText.textContent = `Berhasil mendaftar sebagai ${selectedRole}.`;
-                    signupSuccessMessage.style.display = 'block';
-                    container.classList.remove("sign-up-mode"); // Go back to sign in
-                    // Optionally reset the sign-up form
-                    signupForm.reset();
-                    signupRoleSelect.value = "";
-                    updateSignUpForm();
-                } else if (data.errors) {
-                    // Handle validation errors - display them in the form
-                    // Example:
-                    let errorMessages = '';
-                    for (const key in data.errors) {
-                        errorMessages += `${data.errors[key].join(', ')}\n`;
-                    }
-                    alert('Gagal mendaftar:\n' + errorMessages);
-                } else {
-                    alert('Gagal mendaftar. Silakan coba lagi.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan. Silakan coba lagi nanti.');
+        // -------------- LOGIC REGISTER (dinamis berdasarkan role)
+        const registerForm = document.getElementById('form-register');
+        const roleSelect = document.getElementById('role-select');
+        const registerInputs = registerForm.querySelectorAll('input, select');
+        roleSelect.addEventListener('change', function() {
+            let role = this.value;
+            let action = '';
+            let nameMap = {};
+            switch(role) {
+                case 'owner': action = '/api/owner/register'; nameMap = { name:'NAMA_OWNER', email:'EMAIL_OWNER', phone:'NO_OWNER', address:'ALAMAT_OWNER', password:'PASSWORD_OWNER'}; break;
+                case 'admin': action = '/api/admin/register'; nameMap = { name:'NAMA_ADMIN', email:'EMAIL_ADMIN', phone:'NO_ADMIN', address:'ALAMAT_ADMIN', password:'PASSWORD_ADMIN'}; break;
+                case 'pegawaigudang': action = '/api/pegawai/register'; nameMap = { name:'NAMA_PEGAWAI', email:'EMAIL_PEGAWAI', phone:'NO_PEGAWAI', address:'ALAMAT_PEGAWAI', password:'PASSWORD_PEGAWAI'}; break;
+                case 'pembeli': action = '/api/pembeli/register'; nameMap = { name:'NAMA_PEMBELI', email:'EMAIL_PEMBELI', phone:'NO_PEMBELI', address:'ALAMAT_PEMBELI', password:'PASSWORD_PEMBELI', poin:'POIN_PEMBELI'}; break;
+                case 'penitip': action = '/api/penitip/register'; nameMap = { name:'NAMA_PENITIP', email:'EMAIL_PENITIP', phone:'NO_PENITIP', address:'ALAMAT_PENITIP', password:'PASSWORD_PENITIP', poin:'POIN_PENITIP'}; break;
+                case 'cs': action = '/api/cs/register'; nameMap = { name:'NAMA_CS', email:'EMAIL_CS', phone:'NO_CS', address:'ALAMAT_CS', password:'PASSWORD_CS'}; break;
+                case 'organisasi': action = '/api/organisasi/register'; nameMap = { name:'NAMA_ORGANISASI', email:'EMAIL_ORGANISASI', phone:'NOTELP_ORGANISASI', address:'ALAMAT_ORGANISASI', password:'PASSWORD_ORGANISASI'}; break;
+                case 'hunter': action = '/api/hunter/register'; nameMap = { name:'NAMA_HUNTER', email:'EMAIL_HUNTER', phone:'NO_HUNTER', address:'ALAMAT_HUNTER', password:'PASSWORD_HUNTER'}; break;
+                case 'kurir': action = '/api/kurir/register'; nameMap = { name:'NAMA_KURIR', email:'EMAIL_KURIR', phone:'NO_KURIR', address:'ALAMAT_KURIR', password:'PASSWORD_KURIR'}; break;
+            }
+            registerForm.action = action;
+            registerInputs.forEach(input => {
+                let generic = input.getAttribute('data-generic-name');
+                if(generic && nameMap[generic]) input.name = nameMap[generic];
             });
         });
 
-        // --- Close Success Message ---
-        okBtn.addEventListener('click', () => {
-            signupSuccessMessage.style.display = 'none';
-        });
-
-        // --- Panel Sliding Animation Logic (Same as before) ---
-        sign_up_btn.addEventListener("click", () => {
-            container.classList.add("sign-up-mode");
-        });
-
-        sign_in_btn.addEventListener("click", () => {
-            container.classList.remove("sign-up-mode");
-        });
-
-        // Mobile view buttons
-        sign_up_btn2.addEventListener("click", () => {
-            container.classList.add("sign-up-mode2");
-        });
-
-        sign_in_btn2.addEventListener("click", () => {
-            container.classList.remove("sign-up-mode2");
-        });
-
-        // --- Change Password Modal Logic ---
-        openChangePasswordBtn.addEventListener("click", (e) => {
-            e.preventDefault(); // Prevent default link behavior
-            changePasswordModal.style.display = "block";
-        });
-
-        closeChangePasswordBtn.addEventListener("click", () => {
-            changePasswordModal.style.display = "none";
-        });
-
-        // Close the modal if the user clicks outside of it
-        window.addEventListener("click", (event) => {
-            if (event.target == changePasswordModal) {
-                changePasswordModal.style.display = "none";
+        // -------- SUBMIT REGISTER via AJAX
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('errorRegister').classList.add('hidden');
+            let fd = new FormData(registerForm);
+            let data = {};
+            for (let [k, v] of fd.entries()) data[k] = v;
+            if (data[Object.keys(data).find(k => k.toLowerCase().includes('password'))] !== data['password_confirmation']) {
+                document.getElementById('errorRegister').textContent = "Password tidak cocok!";
+                document.getElementById('errorRegister').classList.remove('hidden');
+                return;
             }
+            fetch(registerForm.action, {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            .then(r => r.json())
+            .then(res => {
+                if(res.status || res.success) {
+                    alert('Registrasi berhasil! Silakan login.');
+                    showLogin();
+                } else {
+                    document.getElementById('errorRegister').textContent = (res.message || "Register gagal");
+                    document.getElementById('errorRegister').classList.remove('hidden');
+                }
+            })
+            .catch(() => {
+                document.getElementById('errorRegister').textContent = "Gagal koneksi ke server.";
+                document.getElementById('errorRegister').classList.remove('hidden');
+            });
         });
+
+        // -------- SUBMIT LOGIN via AJAX
+        document.getElementById('form-login').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('errorLogin').classList.add('hidden');
+            let fd = new FormData(this);
+            let data = { email: fd.get('email'), password: fd.get('password') };
+            fetch(this.action, {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            .then(r => r.json())
+            .then(res => {
+                if(res.success || res.status) {
+                    // Simpan token jika ada
+                    if(res.data && res.data.token) localStorage.setItem('api_token', res.data.token);
+                    let role = (res.data && res.data.role) ? res.data.role : null;
+                    // Redirect ke halaman role
+                    switch(role) {
+                        case "owner": window.location.href = "/dashboardOwner"; break;
+                        case "admin": window.location.href = "/adminPagePegawai"; break;
+                        case "pegawaigudang": window.location.href = "/dashboardGudang"; break;
+                        case "pembeli": window.location.href = "/home"; break;
+                        case "penitip": window.location.href = "/penitipDashboard"; break;
+                        case "cs": window.location.href = "/dashboardCS"; break;
+                        case "organisasi": window.location.href = "/organisasiDashboard"; break;
+                        case "hunter": window.location.href = "/dashboardHunter"; break;
+                        case "kurir": window.location.href = "/dashboardKurir"; break;
+                        default: window.location.href = "/dashboard";
+                    }
+                } else {
+                    document.getElementById('errorLogin').textContent = res.message || "Login gagal";
+                    document.getElementById('errorLogin').classList.remove('hidden');
+                }
+            })
+            .catch(() => {
+                document.getElementById('errorLogin').textContent = "Gagal koneksi ke server.";
+                document.getElementById('errorLogin').classList.remove('hidden');
+            });
+        });
+
+        // --------- SUBMIT FORGOT EMAIL (Customer)
+        window.submitForgotEmail = function(role) {
+            let email = document.getElementById('forgot-email').value;
+            fetch(`/api/${role}/forgot-password`, {
+                method:"POST",
+                headers:{ "Accept":"application/json","Content-Type":"application/json" },
+                body:JSON.stringify({email})
+            }).then(r=>r.json())
+            .then(res=>{
+                alert(res.message || "Silakan cek email Anda!");
+                showLogin();
+            }).catch(()=>alert("Gagal reset password!"));
+        }
+        // --------- SUBMIT FORGOT DATE (Internal)
+        window.submitForgotDate = function(role) {
+            let tgl = document.getElementById('forgot-date').value;
+            fetch(`/api/${role}/reset-password`, {
+                method:"POST",
+                headers:{ "Accept":"application/json","Content-Type":"application/json" },
+                body:JSON.stringify({tanggal_lahir:tgl})
+            }).then(r=>r.json())
+            .then(res=>{
+                alert(res.message || "Password berhasil direset.");
+                showLogin();
+            }).catch(()=>alert("Gagal reset password!"));
+        }
     </script>
 </body>
 </html>
