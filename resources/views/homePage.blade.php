@@ -35,11 +35,11 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Add shadow on hover */
         }
         .card-barang img {
-             width: 100%;
-             height: 180px; /* Fixed height for images */
-             object-fit: cover; /* Cover the area without distorting aspect ratio */
-             border-top-left-radius: 0.5rem;
-             border-top-right-radius: 0.5rem;
+            width: 100%;
+            height: 180px; /* Fixed height for images */
+            object-fit: cover; /* Cover the area without distorting aspect ratio */
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
         }
         .card-body {
             flex-grow: 1; /* Allow body to take up remaining space */
@@ -63,23 +63,32 @@
             color: #28a745; /* Green color for price */
             margin-top: auto; /* Push price to the bottom */
         }
-         .category-card {
-             background-color: #333; /* Slightly lighter than card-barang */
-             color: white;
-             border: 1px solid #444;
-             border-radius: 0.5rem;
-             padding: 1rem;
-             text-align: center;
-             cursor: pointer; /* Indicate it's clickable */
-             transition: background-color 0.2s ease-in-out;
-         }
-         .category-card:hover {
-             background-color: #444; /* Darken on hover */
-         }
-         .category-card strong {
-             display: block; /* Ensure title is on its own line */
-             margin-top: 0.5rem;
-         }
+        .category-card {
+            background-color: #333; /* Slightly lighter than card-barang */
+            color: white;
+            border: 1px solid #444;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer; /* Indicate it's clickable */
+            transition: background-color 0.2s ease-in-out;
+        }
+        .category-card:hover {
+            background-color: #444; /* Darken on hover */
+        }
+        .category-card strong {
+            display: block; /* Ensure title is on its own line */
+            margin-top: 0.5rem;
+        }
+        /* Styles for loading and error messages */
+        .loading-message, .error-message {
+            text-align: center;
+            padding: 1rem;
+            color: #bbb; /* Light gray for messages */
+        }
+        .error-message {
+            color: #dc3545; /* Red for errors */
+        }
     </style>
 </head>
 <body>
@@ -117,18 +126,45 @@
 <script>
     // Function to fetch data from the API
     async function fetchBarang() {
+        const barangRow = document.getElementById('barangRow');
+        const categoriesRow = document.getElementById('categoriesRow');
+
+        // Set initial loading messages
+        barangRow.innerHTML = '<div class="col-12 loading-message">Memuat data barang...</div>';
+        categoriesRow.innerHTML = '<div class="col-12 loading-message">Memuat kategori...</div>';
+
         try {
-            // Replace with your actual API endpoint URL
-            const response = await fetch('http://127.0.0.1:8000/api/barang'); // <-- Replace with your API URL
+            // Fetch data from the API route for Barang
+            // Using relative path for API endpoint
+            const response = await fetch('/api/barang', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                }
+            });
+
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json();
+                throw new Error(`HTTP error! status: ${response.status}, Message: ${errorData.message || response.statusText}`);
             }
-            const data = await response.json();
-            return data.data; // Assuming your API returns data in a 'data' key
+
+            const responseData = await response.json();
+
+            if (responseData.status === true && responseData.data) {
+                return responseData.data; // Return the data array
+            } else {
+                // Display specific error message if API response indicates failure
+                barangRow.innerHTML = `<div class="col-12 error-message">Gagal memuat data barang: ${responseData.message || 'Error tidak diketahui'}</div>`;
+                categoriesRow.innerHTML = `<div class="col-12 error-message">Gagal memuat kategori: ${responseData.message || 'Error tidak diketahui'}</div>`;
+                console.error('API response indicates failure for Barang:', responseData);
+                return []; // Return empty array on logical error
+            }
+
         } catch (error) {
+            // Display generic error message for network or unexpected errors
+            barangRow.innerHTML = `<div class="col-12 error-message">Error memuat data barang. Silakan cek konsol untuk detail.</div>`;
+            categoriesRow.innerHTML = `<div class="col-12 error-message">Error memuat kategori. Silakan cek konsol untuk detail.</div>`;
             console.error("Error fetching barang data:", error);
-            document.getElementById('loadingBarang').innerText = 'Failed to load items.';
-            document.getElementById('loadingCategories').innerText = 'Failed to load categories.';
             return []; // Return empty array on error
         }
     }
@@ -139,8 +175,8 @@
         categoriesRow.innerHTML = ''; // Clear loading message
 
         if (barangData.length === 0) {
-             categoriesRow.innerHTML = '<div class="col-12 text-center text-white">No categories found.</div>';
-             return;
+            categoriesRow.innerHTML = '<div class="col-12 text-center text-white">No categories found.</div>';
+            return;
         }
 
         // Extract unique categories
@@ -177,12 +213,15 @@
 
         // Render each barang item
         barangData.forEach(item => {
+            // Log the ID_BARANG to console for debugging
+            console.log('Rendering item with ID_BARANG:', item.id_barang);
+
             const itemCol = document.createElement('div');
             itemCol.classList.add('col-md-3', 'mb-4'); // Use Bootstrap grid classes
 
             // Basic placeholder image URL - replace with actual item images if available
             // Using placehold.co for simple text placeholders
-             const itemPlaceholderImgUrl = `https://placehold.co/300x180/222/white?text=${encodeURIComponent(item.nama_barang)}`;
+            const itemPlaceholderImgUrl = `https://placehold.co/300x180/222/white?text=${encodeURIComponent(item.nama_barang)}`;
 
 
             itemCol.innerHTML = `
@@ -190,7 +229,7 @@
                     <div class="card-body">
                         <h5 class="card-title">${item.nama_barang}</h5>
                         <p class="card-text">${item.deskripsi_barang}</p>
-                        <p class="card-price">Rp ${item.harga_barang.toLocaleString('id-ID')}</p>
+                        <p class="card-price">Rp ${item.harga_barang ? item.harga_barang.toLocaleString('id-ID') : 'N/A'}</p>
                     </div>
                 </div>
             `;
@@ -206,8 +245,16 @@
         document.querySelectorAll('#barangRow .card-barang').forEach(card => {
             card.addEventListener('click', () => {
                 const itemId = card.dataset.id; // Get the item ID from the data-id attribute
-                // Redirect to the detail page, passing the item ID as a query parameter
-                window.location.href = `/detailBarang/{itemId}`; // <-- Adjust the detail page URL if needed
+                
+                // Check if itemId is defined before redirecting
+                if (itemId) {
+                    // Redirect to the detail page, passing the item ID as a path parameter
+                    window.location.href = `/detailBarang/${itemId}`;
+                } else {
+                    console.error('Error: Item ID is undefined. Cannot redirect to detail page.');
+                    // Optionally, display a user-friendly message
+                    // alert('Product details are not available for this item.');
+                }
             });
         });
     }

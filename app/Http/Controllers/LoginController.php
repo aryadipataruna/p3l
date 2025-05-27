@@ -167,11 +167,11 @@ class LoginController extends Controller
                     return 'admin';
                 case "JAB003":
                     return 'kepala gudang'; // Specific role name
-                case "JAB003":
-                    return 'customer service'; // Specific role name
                 case "JAB004":
-                    return 'hunter';
+                    return 'customer service'; // Specific role name
                 case "JAB005":
+                    return 'hunter';
+                case "JAB006":
                     return 'kurir';
                 default:
                     return 'pegawai'; // Default role for other Jabatan IDs

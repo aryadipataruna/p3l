@@ -345,8 +345,6 @@
             <a href="{{ route('adminPagePegawai') }}">Pegawai</a> 
             <a href="{{ route('adminPageOrganisasi') }}">Organisasi</a>
             <a href="{{ route('adminPageMerchandise') }}">Merchandise</a>
-            <a href="{{ route('adminPageAlamat') }}">Alamat</a>
-            <a href="{{ route('adminPage') }}">Merchandise</a>
             <a href="#">Profile</a>
         </div>
         <div class="user-info">

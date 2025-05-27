@@ -175,8 +175,8 @@
         }
 
         .product-options h3 {
-             font-size: 1.2rem;
-             margin-bottom: 10px;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
         }
 
         .product-options .capacity-options button {
@@ -190,13 +190,13 @@
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
-         .product-options .capacity-options button:hover,
-         .product-options .capacity-options button.selected {
-             background-color: #7BC9FF;
-             border-color: #7BC9FF;
-             color: #1a1a1a;
-             font-weight: 600;
-         }
+        .product-options .capacity-options button:hover,
+        .product-options .capacity-options button.selected {
+            background-color: #7BC9FF;
+            border-color: #7BC9FF;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
 
 
         .quantity-adjuster {
@@ -221,8 +221,8 @@
         }
 
         .quantity-adjuster button:hover {
-             background-color: #555;
-             border-color: #777;
+            background-color: #555;
+            border-color: #777;
         }
 
         .quantity-adjuster input {
@@ -283,13 +283,60 @@
             color: #ccc;
         }
 
-         /* Style for error message */
+        /* Style for error message */
         #error-message {
             text-align: center;
             padding: 50px;
             font-size: 1.5rem;
             color: #ff6b6b; /* Red color for error */
             display: none; /* Hidden by default */
+        }
+
+        /* Styles for Barang Selection Area */
+        #barang-selection-area {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #barang-selection-area h2 {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+        }
+
+        #barang-selection-area .barang-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        #barang-selection-area .barang-item-button {
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        #barang-selection-area .barang-item-button:hover {
+            background-color: #7BC9FF;
+            border-color: #7BC9FF;
+            color: #1a1a1a;
+        }
+
+        #barang-selection-area .barang-item-button.selected-item {
+            background-color: #7BC9FF;
+            border-color: #7BC9FF;
+            color: #1a1a1a;
+            font-weight: 600;
+            box-shadow: 0 0 0 3px rgba(123, 201, 255, 0.5); /* Highlight selected */
         }
 
 
@@ -301,35 +348,35 @@
             }
 
             .navbar .search-bar {
-                 margin: 0;
-                 width: 100%; /* Full width on small screens */
+                margin: 0;
+                width: 100%; /* Full width on small screens */
             }
 
             .navbar .nav-icons {
                 margin-top: 10px;
             }
 
-             .product-detail-section {
-                 flex-direction: column; /* Stack sections vertically */
-                 gap: 20px;
-             }
+            .product-detail-section {
+                flex-direction: column; /* Stack sections vertically */
+                gap: 20px;
+            }
 
-             .product-image-area,
-             .product-info-area,
-             .side-info-area {
-                 flex-basis: 100%; /* Full width */
-                 min-width: unset; /* Remove min-width constraint */
-             }
+            .product-image-area,
+            .product-info-area,
+            .side-info-area {
+                flex-basis: 100%; /* Full width */
+                min-width: unset; /* Remove min-width constraint */
+            }
 
-             .page-header {
-                 flex-direction: column;
-                 align-items: center;
-                 gap: 10px;
-             }
+            .page-header {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
 
-             .page-header a {
-                 font-size: 1rem;
-             }
+            .page-header a {
+                font-size: 1rem;
+            }
         }
 
     </style>
@@ -358,8 +405,16 @@
             <a href="#">Rating</a>
         </div>
 
-        <div id="loading-message">Loading product details...</div>
+        <div id="loading-message">Memuat detail produk...</div>
         <div id="error-message"></div>
+
+        {{-- New section to select a barang item --}}
+        <div id="barang-selection-area">
+            <h2>Pilih Barang untuk Dilihat</h2>
+            <div class="barang-list" id="barang-list">
+                <p class="loading-message">Memuat daftar barang...</p>
+            </div>
+        </div>
 
         <div class="product-detail-section" id="product-detail-content" style="display: none;">
             <div class="product-image-area">
@@ -384,44 +439,44 @@
                         <button id="decrease-quantity">-</button>
                         <input type="text" id="product-quantity" value="1" readonly>
                         <button id="increase-quantity">+</button>
-                         <span id="quantity-info" class="ms-3 text-muted"></span> {{-- e.g., "12/256 GB, Black Unit" --}}
+                        <span id="quantity-info" class="ms-3 text-muted"></span> {{-- e.g., "12/256 GB, Black Unit" --}}
                     </div>
-                     <div class="subtotal mt-3">
+                    <div class="subtotal mt-3">
                         Subtotal <strong id="subtotal-price">Loading...</strong>
-                     </div>
+                    </div>
                 </div>
 
                 <div class="description mt-4">
                     <h3>Deskripsi Produk</h3>
                     <p id="product-description">Loading...</p>
                     {{-- Additional description details like condition, warranty, etc. --}}
-                     <div id="additional-description">
-                         {{-- Additional details loaded here --}}
-                     </div>
+                    <div id="additional-description">
+                        {{-- Additional details loaded here --}}
+                    </div>
                 </div>
             </div>
 
             <div class="side-info-area">
                 <h3>Info Produk</h3>
-                 <div class="info-item">
-                     <strong>Min. Pemesanan:</strong> <span id="min-order">Loading...</span>
-                 </div>
-                  <div class="info-item">
-                     <strong>Etalase:</strong> <span id="etalase">Loading...</span>
-                 </div>
-                 {{-- Add more info items as needed --}}
+                <div class="info-item">
+                    <strong>Min. Pemesanan:</strong> <span id="min-order">Loading...</span>
+                </div>
+                <div class="info-item">
+                    <strong>Etalase:</strong> <span id="etalase">Loading...</span>
+                </div>
+                {{-- Add more info items as needed --}}
             </div>
         </div>
 
         {{-- Placeholder sections for Diskusi and Rating --}}
         <div id="diskusi-section" style="display: none; margin-top: 30px;">
-             <h2>Diskusi</h2>
-             <p>Diskusi section content will go here.</p>
+            <h2>Diskusi</h2>
+            <p>Diskusi section content will go here.</p>
         </div>
 
-         <div id="rating-section" style="display: none; margin-top: 30px;">
-             <h2>Rating</h2>
-             <p>Rating section content will go here.</p>
+        <div id="rating-section" style="display: none; margin-top: 30px;">
+            <h2>Rating</h2>
+            <p>Rating section content will go here.</p>
         </div>
 
     </div>
@@ -452,6 +507,8 @@
         const minOrderSpan = document.getElementById('min-order');
         const etalaseSpan = document.getElementById('etalase');
 
+        const barangListDiv = document.getElementById('barang-list'); // New element for barang list
+
         // Placeholder for the fetched item data
         let currentItemData = null;
 
@@ -463,6 +520,65 @@
             errorMessage.style.display = 'block';
         }
 
+        // Function to fetch all Barang items and display them as selectable buttons
+        async function fetchBarangList() {
+            barangListDiv.innerHTML = '<p class="loading-message">Memuat daftar barang...</p>';
+            try {
+                const response = await fetch('/api/barang', { // Fetch all barang items
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`HTTP error! status: ${response.status}, Message: ${errorData.message || response.statusText}`);
+                }
+
+                const responseData = await response.json();
+
+                if (responseData.status === true && responseData.data) {
+                    barangListDiv.innerHTML = ''; // Clear loading message
+
+                    if (responseData.data.length > 0) {
+                        responseData.data.forEach(item => {
+                            const button = document.createElement('button');
+                            button.classList.add('barang-item-button');
+                            button.textContent = `${item.nama_barang} (${item.id_barang})`;
+                            button.dataset.id = item.id_barang; // Store ID for fetching details
+                            button.addEventListener('click', () => {
+                                // Remove 'selected-item' from all buttons
+                                document.querySelectorAll('.barang-item-button').forEach(btn => btn.classList.remove('selected-item'));
+                                // Add 'selected-item' to the clicked button
+                                button.classList.add('selected-item');
+                                fetchBarangDetail(item.id_barang); // Load details for the clicked item
+                            });
+                            barangListDiv.appendChild(button);
+                        });
+                        // Automatically select and display the first item's details
+                        const firstButton = barangListDiv.querySelector('.barang-item-button');
+                        if (firstButton) {
+                            firstButton.classList.add('selected-item'); // Visually mark as selected
+                            fetchBarangDetail(firstButton.dataset.id);
+                        }
+                    } else {
+                        barangListDiv.innerHTML = '<p class="loading-message">Tidak ada barang ditemukan.</p>';
+                        // If no items, hide the product detail section
+                        productDetailContent.style.display = 'none';
+                        loadingMessage.style.display = 'none';
+                    }
+                } else {
+                    showErrorMessage(`Gagal memuat daftar barang: ${responseData.message || 'Error tidak diketahui'}`);
+                    console.error('API response indicates failure for Barang list:', responseData);
+                }
+            } catch (error) {
+                showErrorMessage(`Error memuat daftar barang: ${error.message}`);
+                console.error('Error fetching Barang list:', error);
+            }
+        }
+
+
         // Function to fetch item data from the API
         async function fetchBarangDetail(itemId) {
             loadingMessage.style.display = 'block';
@@ -471,14 +587,12 @@
 
             // Basic validation for itemId
             if (!itemId) {
-                showErrorMessage('Item ID is missing.');
+                showErrorMessage('Item ID is missing. Please select a product from the list above.');
                 return;
             }
 
-
             try {
-                // Replace with your actual API endpoint base URL if different
-                const response = await fetch(`http://127.0.0.1:8000/api/barang/${itemId}`); // <-- Replace base URL
+                const response = await fetch(`/api/barang/${itemId}`); // Fetch specific barang item
 
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -494,8 +608,8 @@
                     loadingMessage.style.display = 'none';
                     productDetailContent.style.display = 'flex'; // Show the content
                 } else {
-                     console.error('API response indicates failure:', responseData);
-                     showErrorMessage(`Failed to load product data: ${responseData.message || 'Unknown error'}`);
+                    console.error('API response indicates failure:', responseData);
+                    showErrorMessage(`Failed to load product data: ${responseData.message || 'Unknown error'}`);
                 }
 
             } catch (error) {
@@ -516,9 +630,9 @@
             productImage.alt = item.nama_barang || 'Product Image';
             // Add an error handler for the image in case the URL is broken
             productImage.onerror = function() {
-                 this.onerror = null; // Prevent infinite loop
-                 this.src = `https://placehold.co/600x400/222/white?text=Image+Not+Found`;
-                 this.alt = 'Image Not Found';
+                this.onerror = null; // Prevent infinite loop
+                this.src = `https://placehold.co/600x400/222/white?text=Image+Not+Found`;
+                this.alt = 'Image Not Found';
             };
 
 
@@ -538,33 +652,33 @@
             // Handle capacity options (example: assuming capacities are in a field like item.capacities = ['12/256GB', '12/512GB'])
             capacityOptionsDiv.innerHTML = ''; // Clear previous buttons
             if (item.capacities && item.capacities.length > 0) {
-                 item.capacities.forEach(capacity => {
-                     const button = document.createElement('button');
-                     button.textContent = capacity;
-                     // Add a click listener to select capacity (client-side only)
-                     button.addEventListener('click', () => {
-                         // Remove 'selected' class from all buttons
-                         capacityOptionsDiv.querySelectorAll('button').forEach(btn => btn.classList.remove('selected'));
-                         // Add 'selected' class to the clicked button
-                         button.classList.add('selected');
-                         // Update the selected capacity text
-                         selectedCapacitySpan.textContent = capacity;
-                         // Update quantity info text (example)
-                         quantityInfoSpan.textContent = `${capacity}, ${item.warna || 'Color'} Unit`; // Assuming item.warna field
-                     });
-                     capacityOptionsDiv.appendChild(button);
-                 });
-                 // Optionally, select the first capacity by default
-                 if (capacityOptionsDiv.querySelector('button')) {
-                     capacityOptionsDiv.querySelector('button').click(); // Simulate click on the first button
-                 } else {
-                      selectedCapacitySpan.textContent = 'No capacity options available';
-                      quantityInfoSpan.textContent = '';
-                 }
+                item.capacities.forEach(capacity => {
+                    const button = document.createElement('button');
+                    button.textContent = capacity;
+                    // Add a click listener to select capacity (client-side only)
+                    button.addEventListener('click', () => {
+                        // Remove 'selected' class from all buttons
+                        capacityOptionsDiv.querySelectorAll('button').forEach(btn => btn.classList.remove('selected'));
+                        // Add 'selected' class to the clicked button
+                        button.classList.add('selected');
+                        // Update the selected capacity text
+                        selectedCapacitySpan.textContent = capacity;
+                        // Update quantity info text (example)
+                        quantityInfoSpan.textContent = `${capacity}, ${item.warna || 'Color'} Unit`; // Assuming item.warna field
+                    });
+                    capacityOptionsDiv.appendChild(button);
+                });
+                // Optionally, select the first capacity by default
+                if (capacityOptionsDiv.querySelector('button')) {
+                    capacityOptionsDiv.querySelector('button').click(); // Simulate click on the first button
+                } else {
+                    selectedCapacitySpan.textContent = 'No capacity options available';
+                    quantityInfoSpan.textContent = '';
+                }
             } else {
-                 selectedCapacitySpan.textContent = 'No capacity options available';
-                 capacityOptionsDiv.innerHTML = ''; // Remove placeholder if no options
-                 quantityInfoSpan.textContent = '';
+                selectedCapacitySpan.textContent = 'No capacity options available';
+                capacityOptionsDiv.innerHTML = ''; // Remove placeholder if no options
+                quantityInfoSpan.textContent = '';
             }
 
 
@@ -586,17 +700,17 @@
 
             increaseQuantityButton.addEventListener('click', () => {
                 let currentQuantity = parseInt(productQuantityInput.value);
-                 // You might want to add a check for available stock here
+                // You might want to add a check for available stock here
                 productQuantityInput.value = currentQuantity + 1;
                 updateSubtotal();
             });
 
             // Function to update the subtotal based on quantity and price
             function updateSubtotal() {
-                 const quantity = parseInt(productQuantityInput.value);
-                 const price = currentItemData.harga_barang || 0;
-                 const subtotal = quantity * price;
-                 subtotalPriceSpan.textContent = subtotal.toLocaleString('id-ID');
+                const quantity = parseInt(productQuantityInput.value);
+                const price = currentItemData.harga_barang || 0;
+                const subtotal = quantity * price;
+                subtotalPriceSpan.textContent = subtotal.toLocaleString('id-ID');
             }
 
             // Initial subtotal calculation
@@ -605,14 +719,14 @@
             // Handle additional description details (example: assuming details are in a field like item.additional_details = [{ title: 'Kondisi', text: 'Second' }, ...])
             additionalDescriptionDiv.innerHTML = ''; // Clear previous details
             if (item.additional_details && item.additional_details.length > 0) {
-                 item.additional_details.forEach(detail => {
-                     const detailDiv = document.createElement('div');
-                     detailDiv.classList.add('info-item'); // Use info-item class for styling
-                     detailDiv.innerHTML = `<strong>${detail.title}:</strong> ${detail.text}`;
-                     additionalDescriptionDiv.appendChild(detailDiv);
-                 });
+                item.additional_details.forEach(detail => {
+                    const detailDiv = document.createElement('div');
+                    detailDiv.classList.add('info-item'); // Use info-item class for styling
+                    detailDiv.innerHTML = `<strong>${detail.title}:</strong> ${detail.text}`;
+                    additionalDescriptionDiv.appendChild(detailDiv);
+                });
             } else {
-                 additionalDescriptionDiv.innerHTML = '<p>No additional details available.</p>';
+                additionalDescriptionDiv.innerHTML = '<p>No additional details available.</p>';
             }
 
 
@@ -623,12 +737,8 @@
 
         // --- Initial Data Load ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Get the item ID from the URL query parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const itemIdToDisplay = urlParams.get('id'); // Get the value of the 'id' parameter
-
-            // Fetch data using the ID from the URL
-            fetchBarangDetail(itemIdToDisplay);
+            // First, fetch the list of all barang items
+            fetchBarangList();
         });
 
         // Note: The search bar and other navbar links are not functional in this code.

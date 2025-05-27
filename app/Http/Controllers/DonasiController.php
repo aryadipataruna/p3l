@@ -116,8 +116,6 @@ class DonasiController extends Controller
             }
 
             $validateData = $request->validate([
-                'ID_ORGANISASI' => 'required|string',
-                'NAMA_BARANG_DONASI' => 'required|string',
                 'TGL_DONASI' => 'required|date',
                 'NAMA_PENERIMA' => 'required|string',
             ]);

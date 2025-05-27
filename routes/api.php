@@ -13,6 +13,7 @@ use App\Http\Controllers\MerchandiseController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\PenukaranController;
 use App\Http\Controllers\ReqDonasiController;
+use App\Http\Controllers\DonasiController;
 use App\Http\Controllers\LoginController; // Import the LoginController
 
 use Illuminate\Http\Request;
@@ -106,9 +107,11 @@ Route::delete('/alamat/delete/{id}', [AlamatController::class, 'destroy'])->name
 
 Route::get('/barang', [BarangController::class, 'index'])->name('barang.index');
 Route::get('/barang/{id}', [BarangController::class, 'show'])->name('barang.show');
+Route::get('/barang/terjual', [BarangController::class, 'produkTerjual']);
 Route::post('/barang/create', [BarangController::class, 'store'])->name('barang.store');
 Route::put('/barang/update/{id}', [BarangController::class, 'update'])->name('barang.update');
 Route::delete('/barang/delete/{id}', [BarangController::class, 'destroy'])->name('barang.destroy');
+Route::put('/barang/{id}/extend', [BarangController::class, 'extend'])->name('barang.extend');
 
 Route::get('/diskusi', [DiskusiController::class, 'index'])->name('diskusi.index');
 Route::get('/diskusi/{id}', [DiskusiController::class, 'show'])->name('diskusi.show');

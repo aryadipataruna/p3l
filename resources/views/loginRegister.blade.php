@@ -304,10 +304,6 @@
                      <i class="fas fa-lock"></i>
                      <input type="password" name="generic_password" placeholder="Password" required data-generic-name="password">
                  </div>
-                  <div class="input-field">
-                     <i class="fas fa-lock"></i>
-                     <input type="password" name="password_confirmation" placeholder="Konfirmasi Password" required>
-                 </div>
                  {{-- Add hidden inputs for default values for nullable fields based on role --}}
                  {{-- These will be updated by JavaScript based on the role --}}
                  <input type="hidden" name="generic_poin" value="0" data-generic-name="poin">
@@ -331,7 +327,7 @@
                     <h3>Belum punya akun?</h3>
                     <p>Daftar sekarang dan temukan barang-barang unik di ReUse Mart!</p> <button class="btn" id="sign-up-btn">Sign up</button>
                 </div>
-                <img src="signup.svg" alt="Sign Up Illustration" class="image"> </div>
+                <div></div>
         </div>
     </div>
 
@@ -358,9 +354,8 @@
         function updateSignUpForm() {
             const selectedRole = roleSelect.value;
             let registrationRoute = '';
-            let nameMapping = {}; // Object to store the mapping from generic to specific names
-
-            // Determine the registration route and name mapping based on the selected role
+            let nameMapping = {}; 
+            
             switch (selectedRole) {
                 case 'pembeli':
                     registrationRoute = '{{ route("pembeli.store") }}'; // Use the named route for pembeli registration
@@ -370,7 +365,6 @@
                         'password': 'PASSWORD_PEMBELI',
                         'phone': 'NO_PEMBELI', // Corrected name based on Pembeli model
                         'address': 'ALAMAT_PEMBELI',
-                        'poin': 'POIN_PEMBELI', // Mapping for hidden poin field
                         // 'saldo': 'SALDO_PEMBELI' // Pembeli model doesn't have SALDO_PEMBELI
                     };
                     break;
@@ -379,39 +373,13 @@
                      nameMapping = {
                         'name': 'NAMA_ORGANISASI',
                         'email': 'EMAIL_ORGANISASI',
-                        'phone': 'NOTELP_ORGANISASI', // Corrected name based on Organisasi model
+                        'phone': 'NOTELP_ORGANISASI', 
                         'address': 'ALAMAT_ORGANISASI',
                         'password': 'PASSWORD_ORGANISASI',
-                        // 'poin': 'POIN_ORGANISASI', // Organisasi model doesn't have POIN_ORGANISASI
-                        // 'saldo': 'SALDO_ORGANISASI' // Organisasi model doesn't have SALDO_ORGANISASI
                     };
                     break;
-                 // Add cases for 'penitip' and 'pegawai' if they can register here
-                 // case 'penitip':
-                 //     registrationRoute = '{{ route("penitip.store") }}';
-                 //     nameMapping = {
-                 //         'name': 'NAMA_PENITIP',
-                 //         'email': 'EMAIL_PENITIP', // Assuming Penitip has email for registration
-                 //         'phone': 'NOTELP_PENITIP', // Assuming Penitip has phone
-                 //         'address': 'ALAMAT_PENITIP',
-                 //         'password': 'PASSWORD_PENITIP',
-                 //         'poin': 'POIN_PENITIP',
-                 //         'saldo': 'SALDO_PENITIP'
-                 //     };
-                 //     break;
-                 // case 'pegawai':
-                 //      registrationRoute = '{{ route("pegawai.store") }}';
-                 //      nameMapping = {
-                 //          'name': 'NAMA_PEGAWAI',
-                 //          'email': 'EMAIL_PEGAWAI',
-                 //          'phone': 'NOTELP_PEGAWAI',
-                 //          'address': 'ALAMAT_PEGAWAI',
-                 //          'password': 'PASSWORD_PEGAWAI',
-                 //          // Pegawai also needs ID_JABATAN - you'd need another input or logic for this
-                 //      };
-                 //      break;
+                 
                 default:
-                    // Set a default or handle the case where no role is selected
                     registrationRoute = '';
                     nameMapping = {}; // Clear mapping if no valid role is selected
             }
@@ -537,16 +505,24 @@
 
                     // Redirect based on role
                     if (result.data.role === 'admin') {
-                        window.location.href = '/adminPagePegawai'; // Example admin dashboard route
+                        window.location.href = '/adminPagePegawai';
                     } else if (result.data.role === 'pembeli') {
-                        window.location.href = '/home'; // Example buyer home page
+                        window.location.href = '/home'; 
                     } else if (result.data.role === 'penitip') {
-                        window.location.href = '/penitipDashboard'; // Example consignor dashboard
+                        window.location.href = '/penitipDashboard'; 
                     } else if (result.data.role === 'organisasi') {
-                        window.location.href = '/organisasiDashboard'; // Example organization dashboard
+                        window.location.href = '/organisasiDashboard'; 
                     } else if (result.data.role === 'owner') {
-                        window.location.href = '/ownerDashboard';
-                    } else {
+                        window.location.href = '/adminPageOwner';
+                    }  else if (result.data.role === 'gudang') {
+                        window.location.href = '/adminPageGudang';
+                    }  else if (result.data.role === 'customer service') {
+                        window.location.href = '/csDashboard';
+                    }   else if (result.data.role === 'hunter') {
+                        window.location.href = '/hunterDashboard';
+                    }   else if (result.data.role === 'kurir') {
+                        window.location.href = '/kurirDashboard';
+                    }   else {
                         // Default redirect if role is unknown or not handled
                         window.location.href = '/dashboard'; // Fallback dashboard
                     }
@@ -582,13 +558,13 @@
             const passwordInput = signUpForm.querySelector('input[data-generic-name="password"]');
             const passwordFieldName = passwordInput ? passwordInput.name : 'generic_password'; // Fallback to generic name
 
-            if (data[passwordFieldName] !== data.password_confirmation) {
-                signUpErrorMessage.textContent = "Passwords do not match!";
-                console.error("Passwords do not match!");
-                return;
-            }
-            // Remove password_confirmation before sending
-            delete data.password_confirmation;
+            // if (data[passwordFieldName] !== data.password_confirmation) {
+            //     signUpErrorMessage.textContent = "Passwords do not match!";
+            //     console.error("Passwords do not match!");
+            //     return;
+            // }
+            // // Remove password_confirmation before sending
+            // delete data.password_confirmation;
 
             // The registrationEndpoint is now set dynamically by updateSignUpForm()
             const registrationEndpoint = signUpForm.action;

@@ -29,10 +29,18 @@ Route::get('/adminPageOrganisasi', function () {
     return view('admin.adminPageOrganisasi');
 })->name('adminPageOrganisasi');
 
+Route::get('/adminPageOwner', function () {
+    return view('admin.adminPageOwner');
+})->name('adminPageOwner');
+
+Route::get('/adminPageGudang', function () {
+    return view('admin.adminPageGudang');
+})->name('adminPageGudang');
+
 Route::get('/detailBarang/{id}', function ($id) {
     return view('detailBarangPage', ['id' => $id]);
 })->name('detailBarang');
 
-Route::get('/passwordBiasa', fuction (){
-    return view('password.passwordTglLahir');
-})->name('passwordEmail');
+// Route::get('/passwordBiasa'), fuction (){
+//     return view('password.passwordTglLahir');
+// })->name('passwordEmail');

@@ -31,6 +31,37 @@ class BarangController extends Controller
         }
     }
 
+    public function produkTerjual()
+    {
+        try {
+            $data = Barang::where('status', 'terjual')->get();
+
+            // Check if any items with 'terjual' status were found
+            if ($data->isEmpty()) {
+                 return response()->json([
+                    "status" => false,
+                    "message" => "No sold items found.",
+                    "data" => [] // Return an empty array if no sold items exist
+                ], 404); // Use 404 Not Found if no sold items are found
+            }
+
+            
+            return response()->json([
+                "status" => true,
+                "message" => "Getting all Barang successful!",
+                "data" => $data
+            ], 500);
+            
+
+        } catch (\Exception $e) {
+            return response()->json([
+                "status" => false,
+                "message" => "Getting all Barang failed!!!",
+                "data" => $e->getMessage()
+            ], 400);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -49,10 +80,10 @@ class BarangController extends Controller
                 'tgl_titip' => 'required|date', // NOT NULL in DB
                 'tgl_laku' => 'nullable|date', // NULL in DB
                 'garansi' => 'required|boolean', // NOT NULL in DB (tinyint)
-                'perpanjangan' => 'required|boolean', // NOT NULL in DB (tinyint)
-                'count_perpanjangan' => 'required|integer', // NOT NULL in DB
+                'perpanjangan' => 'nullable|boolean', // NOT NULL in DB (tinyint)
+                'count_perpanjangan' => 'nullable|integer', // NOT NULL in DB
                 'status' => 'nullable|string', // NULL in DB
-                'bukti_pembayaran' => 'required|string', // NOT NULL in DB
+                'bukti_pembayaran' => 'nullable|string', // NOT NULL in DB
             ]);
 
              // Generate unique id_barang (e.g., BAR001, BAR002, ...)
@@ -69,15 +100,15 @@ class BarangController extends Controller
             // Format the new ID with the prefix 'BAR' and pad with leading zeros to 3 digits
             $generatedId = 'BAR' . str_pad($nextIdNumber, 3, '0', STR_PAD_LEFT);
 
-            // Hitung tgl_akhir (tgl_titip + 7 hari)
-            // Pastikan tgl_titip adalah instance Carbon atau gunakan Carbon::parse()
-            $tglTitip = Carbon::parse($validateData['tgl_titip']);
-            $tglAkhir = $tglTitip->addDays(7)->toDateString(); // Ambil hanya tanggal
+            $barang->tgl_titip = Carbon::now()->toDateString(); // Tanggal hari ini
+            $barang->tgl_akhir = Carbon::now()->addDays(30)->toDateString(); // Tanggal titip + 30 hari
+            $barang->perpanjangan = false; // Inisialisasi
+            $barang->count_perpanjangan = 0; // Inisialisasi
 
             // Buat instance Barang baru dan set ID yang di-generate dan data lainnya
             $barang = new Barang($validateData); // Isi atribut lain menggunakan mass assignment
             $barang->id_barang = $generatedId; // Set primary key yang di-generate
-            $barang->tgl_akhir = $tglAkhir; // Set tgl_akhir yang dihitung
+
             $barang->save(); // Simpan model ke database
 
 
@@ -144,10 +175,10 @@ class BarangController extends Controller
                 'tgl_titip' => 'required|date',
                 'tgl_laku' => 'nullable|date',
                 'garansi' => 'required|boolean',
-                'perpanjangan' => 'required|boolean',
-                'count_perpanjangan' => 'required|integer',
+                'perpanjangan' => 'nullable|boolean',
+                'count_perpanjangan' => 'nullable|integer',
                 'status' => 'nullable|string',
-                'bukti_pembayaran' => 'required|string',
+                'bukti_pembayaran' => 'nullable|string',
             ]);
 
             $data->update($validateData);
@@ -191,6 +222,51 @@ class BarangController extends Controller
                 "message" => "Failed to delete the Barang!!!",
                 "data" => $e->getMessage()
             ], 400);
+        }
+    }
+
+    public function extend(Request $request, $id)
+    {
+        try {
+            $barang = Barang::findOrFail($id);
+
+            $today = Carbon::now()->toDateString(); // Tanggal hari ini (YYYY-MM-DD)
+            $tglAkhirBarang = Carbon::parse($barang->tgl_akhir)->toDateString(); // Tanggal akhir barang
+
+            // Cek apakah tgl_akhir barang sama dengan hari ini
+            if ($tglAkhirBarang !== $today) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Perpanjangan hanya bisa dilakukan pada tanggal akhir titip (hari ini).'
+                ], 400); // Bad Request
+            }
+
+            // Cek apakah perpanjangan maksimal sudah tercapai (2 kali)
+            if ($barang->count_perpanjangan >= 2) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Perpanjangan maksimal sudah tercapai (2 kali).'
+                ], 400); // Bad Request
+            }
+
+            // Update consignment details
+            $barang->count_perpanjangan += 1;
+            $barang->perpanjangan = true; // Tandai bahwa barang telah diperpanjang
+            $barang->tgl_akhir = Carbon::parse($tglAkhirBarang)->addDays(30)->toDateString(); // Perpanjang 30 hari dari tgl_akhir sebelumnya
+
+            $barang->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Masa titip barang berhasil diperpanjang! (Perpanjangan ke-' . $barang->count_perpanjangan . ')',
+                'data' => $barang
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal memperpanjang masa titip: ' . $e->getMessage()
+            ], 500); // Internal Server Error
         }
     }
 }
