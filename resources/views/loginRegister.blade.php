@@ -270,13 +270,13 @@
             let action = '';
             let nameMap = {};
             switch(role) {
-                case 'owner': action = '/api/owner/register'; nameMap = { name:'NAMA_OWNER', email:'EMAIL_OWNER', phone:'NO_OWNER', address:'ALAMAT_OWNER', password:'PASSWORD_OWNER'}; break;
+                case 'owner': action = '/api/owner/register'; nameMap = { 'name':'NAMA_OWNER', email:'EMAIL_OWNER', phone:'NO_OWNER', address:'ALAMAT_OWNER', password:'PASSWORD_OWNER'}; break;
                 case 'admin': action = '/api/admin/register'; nameMap = { name:'NAMA_ADMIN', email:'EMAIL_ADMIN', phone:'NO_ADMIN', address:'ALAMAT_ADMIN', password:'PASSWORD_ADMIN'}; break;
                 case 'pegawaigudang': action = '/api/pegawai/register'; nameMap = { name:'NAMA_PEGAWAI', email:'EMAIL_PEGAWAI', phone:'NO_PEGAWAI', address:'ALAMAT_PEGAWAI', password:'PASSWORD_PEGAWAI'}; break;
-                case 'pembeli': action = '/api/pembeli/register'; nameMap = { name:'NAMA_PEMBELI', email:'EMAIL_PEMBELI', phone:'NO_PEMBELI', address:'ALAMAT_PEMBELI', password:'PASSWORD_PEMBELI', poin:'POIN_PEMBELI'}; break;
+                case 'pembeli': route = '{ route{"pembeli.store"}}'; nameMap = { 'name':'NAMA_PEMBELI', email:'EMAIL_PEMBELI', phone:'NO_PEMBELI', address:'ALAMAT_PEMBELI', password:'PASSWORD_PEMBELI', poin:'POIN_PEMBELI'}; break;
                 case 'penitip': action = '/api/penitip/register'; nameMap = { name:'NAMA_PENITIP', email:'EMAIL_PENITIP', phone:'NO_PENITIP', address:'ALAMAT_PENITIP', password:'PASSWORD_PENITIP', poin:'POIN_PENITIP'}; break;
                 case 'cs': action = '/api/cs/register'; nameMap = { name:'NAMA_CS', email:'EMAIL_CS', phone:'NO_CS', address:'ALAMAT_CS', password:'PASSWORD_CS'}; break;
-                case 'organisasi': action = '/api/organisasi/register'; nameMap = { name:'NAMA_ORGANISASI', email:'EMAIL_ORGANISASI', phone:'NOTELP_ORGANISASI', address:'ALAMAT_ORGANISASI', password:'PASSWORD_ORGANISASI'}; break;
+                case 'organisasi': action = '/api/organisasi/register'; nameMap = { 'name':'NAMA_ORGANISASI', email:'EMAIL_ORGANISASI', phone:'NOTELP_ORGANISASI', address:'ALAMAT_ORGANISASI', password:'PASSWORD_ORGANISASI'}; break;
                 case 'hunter': action = '/api/hunter/register'; nameMap = { name:'NAMA_HUNTER', email:'EMAIL_HUNTER', phone:'NO_HUNTER', address:'ALAMAT_HUNTER', password:'PASSWORD_HUNTER'}; break;
                 case 'kurir': action = '/api/kurir/register'; nameMap = { name:'NAMA_KURIR', email:'EMAIL_KURIR', phone:'NO_KURIR', address:'ALAMAT_KURIR', password:'PASSWORD_KURIR'}; break;
             }
