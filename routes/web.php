@@ -28,6 +28,22 @@ Route::get('/adminPageOrganisasi', function () {
     return view('admin.adminPageOrganisasi');
 })->name('adminPageOrganisasi');
 
-Route::get('/detailBarang/{id}', function ($id) {
-    return view('detailBarangPage', ['id' => $id]);
+// Route::get('/detailBarang/{id}', function ($id) {
+//     return view('detailBarangPage', ['id' => $id]);
+// })->name('detailBarang');
+
+Route::get('/cartPembeli', function () {
+    return view('cart');
+})->name('cartPembeli');
+
+Route::get('/detailBarang', function () {
+    return view('detailBarangPage');
 })->name('detailBarang');
+
+Route::get('/cartPembeli/detailPemesanan', function () {
+    return view('detailPemesanan');
+})->name('order');
+
+Route::get('/cartPembeli/detailPemesanan/nota', function () {
+    return view('nota');
+})->name('nota');
