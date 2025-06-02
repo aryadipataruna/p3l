@@ -40,10 +40,10 @@ Route::get('/detailBarang', function () {
     return view('detailBarangPage');
 })->name('detailBarang');
 
-Route::get('/cartPembeli/detailPemesanan', function () {
+Route::get('/detailBarang/cartPembeli/detailPemesanan', function () {
     return view('detailPemesanan');
 })->name('order');
 
-Route::get('/cartPembeli/detailPemesanan/nota', function () {
+Route::get('/detailBarang/cartPembeli/detailPemesanan/nota', function () {
     return view('nota');
 })->name('nota');
